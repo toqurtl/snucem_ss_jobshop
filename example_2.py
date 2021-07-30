@@ -130,8 +130,7 @@ def MinimalJobshopSat(string):
         fig = ff.create_gantt(df, colors=colors, index_col='Resource', group_tasks=True, show_colorbar=True)
         pyplt(fig, filename=r"./GanttChart.html", auto_open=False)
         
-file_name = input("Input file name: ")
-data, check = load_text(file_name)
+data, check = load_text("sample.txt")
 print(data)
 print(check)
 if data is not None:
