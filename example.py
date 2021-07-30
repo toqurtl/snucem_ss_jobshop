@@ -10,9 +10,9 @@ def MinimalJobshopSat():
     model = cp_model.CpModel()
 
     jobs_data = [  # task = (machine_id, processing_time).
-        [(0, 3), (1, 2), (2, 2)],  # Job0
-        [(0, 2), (2, 1), (1, 4)],  # Job1
-        [(1, 4), (2, 3)]  # Job2
+        [(1, 2), (0, 2), (2, 2)],  # Job0
+        [(0, 3), (2, 1), (1, 4)],  # Job1
+        [(1, 4), (0, 3)]  # Job2
     ]
 
     machines_count = 1 + max(task[0] for job in jobs_data for task in job)
