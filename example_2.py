@@ -30,6 +30,7 @@ def rgb():
 def MinimalJobshopSat(string):
     a = list(map(int,string.split()))    
     n, machines_count = a[0], a[1]
+    
     all_machines = range(machines_count)
     jobs_data = []
     job = []
@@ -55,7 +56,7 @@ def MinimalJobshopSat(string):
     # Creates job intervals and add to the corresponding machine lists.
     all_tasks = {}
     machine_to_intervals = collections.defaultdict(list)
-
+    
     for job_id, job in enumerate(jobs_data):
         for task_id, task in enumerate(job):
             machine = task[0]
@@ -92,6 +93,8 @@ def MinimalJobshopSat(string):
     status = solver.Solve(model)
     
     if status == cp_model.OPTIMAL:
+        print(jobs_data)
+        print(type(jobs_data))
         # Create one list of assigned tasks per machine.
         assigned_jobs = collections.defaultdict(list)
         for job_id, job in enumerate(jobs_data):
@@ -124,6 +127,7 @@ def MinimalJobshopSat(string):
                                Finish=start_date + time_delta(0, start + duration),
                                Resource="%s" % (assigned_task.job + 1), complete=assigned_task.job + 1))
         colors = {}
+        print(df)
         for i in range(n):
             key = "%s" % (i + 1)
             colors[key] = "rgb(%s, %s, %s)" % (rgb(), rgb(), rgb())
@@ -131,7 +135,7 @@ def MinimalJobshopSat(string):
         pyplt(fig, filename=r"./GanttChart.html", auto_open=False)
         
 data, check = load_text("sample.txt")
-print(data)
-print(check)
+# print(data)
+# print(check)
 if data is not None:
     MinimalJobshopSat(data)
