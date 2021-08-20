@@ -5,3 +5,7 @@
 # cache
 __pycache__/
 *.pyc
+
+# test
+playground.py
+ss_js_test

@@ -11,13 +11,15 @@ class Params(Enum):
     TASK_NAME = "task_name"
     DURATION = "duration"
     TASK_DEPENDENCY = "task_dependency"
-    REQUIRED_LABOR_SET = "required_labor_set"
+    LABOR_SET = "labor_set"
+    REQUIRED_LABOR = "required"
+    ALT_ID = "alt_id"   
 
 
 class ComponentParams(Enum):
-    LABOR = "labor"
+    LABOR_TYPE = "labor_type"
     ZONE = "zone"
-    TASK = "task"
+    TASK_TYPE = "task_type"
 
 
 class ModelParams(Enum):

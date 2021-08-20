@@ -175,7 +175,7 @@ def flexible_zoneshop():
 
     # Create labors constraints.
     for labor_id in all_labors:
-        intervals = intervals_per_resources[labor_id]
+        intervals = intervals_per_resources[labor_id]        
         if len(intervals) > 1:
             model.AddNoOverlap(intervals)
     

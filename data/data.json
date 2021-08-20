@@ -1,78 +1,105 @@
 {
-    "labor":{
-        "l1":{
+    "labor_type":[
+        {
             "labor_id": "l1",
             "labor_name": "labor_1",
             "number":10
         },
-        "l2":{
+        {
             "labor_id": "l2",
             "labor_name": "labor_2",
             "number": 10
         },
-        "l3":{
+        {
             "labor_id": "l3",
             "labor_name": "labor_3",
             "number": 10
         },
-        "l4":{
+        {
             "labor_id": "l4",
             "labor_name": "labor_4",
             "number": 10            
         }
-    },
-    "task":{
-        "A0":{
+    ],
+    "task_type":[
+        {
             "task_id": "A0",
             "task_name": "A0",
-            "required_labor_set":{
-                "l1": 2, 
-                "l2": 1
-            },
-            "duration": 5
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required":[
+                            ["l1", 2], 
+                            ["l2", 1]
+                        ],
+                        "duration": 5
+                    },{
+                        "alt_id": 1,
+                        "required":[
+                            ["l1", 2],
+                            ["l2", 2]
+                        ],
+                        "duration": 4
+                    }
+                ]    
         },
-        "A1":{
+        {
             "task_id": "A1",
             "task_name": "A1",
-            "required_labor_set":{
-                "l3": 2
-            },
-            "duration": 5
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required": [
+                            ["l3", 2]
+                        ],
+                        "duration": 5                    
+                    }
+            ]            
         },
-        "A2":{
+        {
             "task_id": "A2",
             "task_name": "A2",
-            "required_labor_set":{
-                "l1": 2, 
-                "l2": 1
-            },            
-            "duration": 5
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required":[
+                            ["l1", 2],
+                            ["l2", 1]
+                        ],
+                        "duration": 5
+                 }                
+                ]                
         },
-        "A3":{
+        {
             "task_id": "A3",
             "task_name": "A3",
-            "required_labor_set":{
-                "l4": 1
-            },
-            "duration": 5
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required": [
+                            ["l4", 2]
+                        ],
+                        "duration": 5
+                    }
+            ]
         }
-    },
-    "zone":{
-        "z1":{
+    ],
+    "zone":[
+        {
             "zone_id": "z1",
             "zone_name": "z1",
             "task_dependency": ["A0", "A1","A2"]
         },
-        "z2":{
+        {
             "zone_id": "z2",
             "zone_name": "z2",
             "task_dependency": ["A1", "A2","A3"]
         },
-        "z3":{
+        {
             "zone_id": "z3",
             "zone_name": "z3",
-            "task_dependency": ["A0", "A3", "A3"]
+            "task_dependency": ["A0", "A1", "A3"]
         }
-    }
+    ]
 
 }

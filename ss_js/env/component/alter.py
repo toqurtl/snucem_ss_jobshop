@@ -1,0 +1,2 @@
+class Alter(object):
+    pass
