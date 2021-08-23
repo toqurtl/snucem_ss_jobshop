@@ -184,10 +184,18 @@ def flexible_zoneshop():
     model.AddMaxEquality(makespan, zone_ends)
     model.Minimize(makespan)
 
+
+
     # Solve model.
     solver = cp_model.CpSolver()
     solution_printer = SolutionPrinter()
+    
     status = solver.SolveWithSolutionCallback(model, solution_printer)
+
+    for zone_id in all_zones:
+        for task_id in range(len(zones[zone_id])):
+            for alt_id in range(len(zones[zone_id][task_id])):
+                pass
 
     
 
@@ -203,7 +211,7 @@ def flexible_zoneshop():
     for zone_id in all_zones:
         print('Zone %i:' % zone_id)        
         for task_id in range(len(zones[zone_id])):
-            start_value = solver.Value(starts[(zone_id, task_id)])
+            start_value = solver.Value(starts[(zone_id, task_id)])            
             labor = -1
             duration = -1
             selected = -1
