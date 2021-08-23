@@ -23,16 +23,17 @@ class Labor(object):
         self.id = None
         self.set_id(self.type.id + "_" + labor_idx) 
                
-        self.interval_var_dict = {}            
-        
-        # alt_id: [task_id, interval_var]
-        # (AddNoOverlap(interval).OnlyEnforce(presence))     
+        self.alt_dict = {}        
+        # (AddNoOverlap(interval).OnlyEnforce(presence))   
+          
+        self.labor_presence_vars = {} # alt_id, labor_presence
 
     def __str__(self):
         return self.id
 
     def set_id(self, possible_id):
         if possible_id in Labor.id_list:
+            # TODO - make exception
             print("labor id exists in already")
         else:
             self.id = possible_id
@@ -49,8 +50,21 @@ class Labor(object):
 
     @property
     def num_interval_vars(self):
-        return len(self.interval_var_list)
+        return len(self.alt_dict)
 
-    def add_interval_var(self, task_id, alt_id, interval_var: cp_model.IntervalVar):
-        self.interval_var_dict[alt_id] = [task_id, interval_var]        
+    def add_alter(self, alter, model: cp_model.CpModel):
+        self.alt_dict[alter.id] = alter
+        self.labor_presence_vars[alter.id] = model.NewBoolVar('labor_presence_'+alter.id+"_"+self.id)        
         return
+
+    def labor_presence_var(self, alt_id):
+        return self.labor_presence_vars[alt_id]
+
+    def labor_presence_var_list(self):
+        return [var for var in self.labor_presence_vars.values()]
+   
+    def interval_var(self, alt_id):
+        return self.alt_dict[alt_id].interval_var
+
+    def interval_var_list(self):
+        return [alter.interval_var for alter in self.alt_dict.values()]

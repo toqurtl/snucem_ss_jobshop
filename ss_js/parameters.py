@@ -20,6 +20,8 @@ class ComponentParams(Enum):
     LABOR_TYPE = "labor_type"
     ZONE = "zone"
     TASK_TYPE = "task_type"
+    LABOR = "labor"
+    ALTER = "alt"
 
 
 class ModelParams(Enum):
@@ -27,4 +29,5 @@ class ModelParams(Enum):
     DURATION = 'duration'
     END = 'end'
     INTERVAL = 'interval'
-    PRESENCE = 'presence'
+    LABOR_PRESENCE = 'labor_presence'
+    ALT_PRESENCE = 'alt_presence'
