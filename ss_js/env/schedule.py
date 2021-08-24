@@ -136,7 +136,9 @@ class Schedule(cp_model.CpModel):
     # 1) 각 labor별 관련 interval들이 서로 중복되지 않게 함    
     def set_labor_interval_constraints(self):
         for labor in self.labor_dict.values():            
-            if labor.num_interval_vars > 1:                                                
+            if labor.num_interval_vars > 1:
+                # TODO - 이 부분 때문에 원하는 결과가 안나옴. overlap을 좀더 복잡하게 해야 함
+                # TODO - 현재는 labor_1이 task에 잡히든 안잡히든 무조건 overlap되지 않게 설정됨                            
                 self.AddNoOverlap(labor.interval_var_list())
         return
 

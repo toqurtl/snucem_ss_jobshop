@@ -23,9 +23,7 @@ class Labor(object):
         self.id = None
         self.set_id(self.type.id + "_" + labor_idx) 
                
-        self.alt_dict = {}        
-        # (AddNoOverlap(interval).OnlyEnforce(presence))   
-          
+        self.alt_dict = {}
         self.labor_presence_vars = {} # alt_id, labor_presence
 
     def __str__(self):
