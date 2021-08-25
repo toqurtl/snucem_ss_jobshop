@@ -8,17 +8,17 @@
         {
             "labor_id": "l2",
             "labor_name": "labor_2",
-            "number": 10
+            "number": 4
         },
         {
             "labor_id": "l3",
             "labor_name": "labor_3",
-            "number": 10
+            "number": 3
         },
         {
             "labor_id": "l4",
             "labor_name": "labor_4",
-            "number": 10            
+            "number": 2          
         }
     ],
     "task_type":[
@@ -93,12 +93,12 @@
         {
             "zone_id": "z2",
             "zone_name": "z2",
-            "task_dependency": ["A1", "A2","A3"]
+            "task_dependency": ["A0", "A1","A2"]
         },
         {
             "zone_id": "z3",
             "zone_name": "z3",
-            "task_dependency": ["A0", "A1", "A3"]
+            "task_dependency": ["A0", "A1", "A2"]
         }
     ]
 

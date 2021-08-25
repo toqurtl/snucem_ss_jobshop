@@ -8,12 +8,23 @@ class LaborType(object):
         self.id = labor_data.get(Params.LABOR_ID.value)
         self.name = labor_data.get(Params.LABOR_NAME.value)
         self.num_labor = labor_data.get(Params.LABOR_NUMBER.value)
+        self.interval_var_list = []
+        self.demand_list = []
     
     def __str__(self):
         return self.id+"_"+self.name
 
     def __eq__(self, other):
         return self.id == other.id
+
+    def add_interval_var(self, interval):
+        self.interval_var_list.append(interval)
+    
+    def add_demand(self, demand):
+        return self.demand_list.append(demand)
+
+    def capacity(self):
+        return self.num_labor
 
     
 class Labor(object):
@@ -24,7 +35,7 @@ class Labor(object):
         self.set_id(self.type.id + "_" + labor_idx) 
                
         self.alt_dict = {}
-        self.labor_presence_vars = {} # alt_id, labor_presence
+        self.labor_presence_vars = {} # alt_id, labor_presence        
 
     def __str__(self):
         return self.id
@@ -66,3 +77,6 @@ class Labor(object):
 
     def interval_var_list(self):
         return [alter.interval_var for alter in self.alt_dict.values()]
+
+    def alt_list(self):
+        return list(self.alt_dict.values())

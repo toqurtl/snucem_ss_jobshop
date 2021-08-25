@@ -8,6 +8,7 @@ from ortools.sat.python import cp_model
 from functools import reduce
 from ss_js.parameters import ModelParams, Params
 import json
+from itertools import combinations
 
 
 # Variables in the model
@@ -30,6 +31,7 @@ class Schedule(cp_model.CpModel):
         super().__init__()
         self.env = Environment(data)
         self.alter_dict = {}
+        
 
         # Global storage of variables for js problem
         self.start_var_dict = {}        
@@ -60,6 +62,10 @@ class Schedule(cp_model.CpModel):
     @property
     def task_dict(self) -> Dict[str, Task]:
         return self.env.task_dict
+
+    @property
+    def labor_type_dict(self) -> Dict[str, LaborType]:
+        return self.env.labor_type_dict
 
     @property
     def horizon(self):
@@ -117,9 +123,13 @@ class Schedule(cp_model.CpModel):
             for alter in task.alt_dict.values():            
                 for labor_type_id in alter.labor_type_id_list():
                     labor_list = self.labor_list_of_type(labor_type_id)                
+                    labor_type = self.labor_type_dict[labor_type_id]
+                    labor_type.add_interval_var(alter.interval_var)
+                    labor_type.add_demand(alter.num_labor_type(labor_type_id))
                     for labor in labor_list:                    
-                        labor.add_alter(alter, self)
-                        alter.set_labor(labor)                 
+                        labor.add_alter(alter, self)                        
+                        alter.set_labor(labor)      
+                                 
         return
 
     
@@ -139,8 +149,21 @@ class Schedule(cp_model.CpModel):
             if labor.num_interval_vars > 1:
                 # TODO - 이 부분 때문에 원하는 결과가 안나옴. overlap을 좀더 복잡하게 해야 함
                 # TODO - 현재는 labor_1이 task에 잡히든 안잡히든 무조건 overlap되지 않게 설정됨                            
-                self.AddNoOverlap(labor.interval_var_list())
+                # self.AddNoOverlap(labor.interval_var_list())
+                pass
+                # alt_list = labor.alt_list()
+                # combination_alt_list = combinations(alt_list, 2)                
+                # for alt_1, alt_2 in combination_alt_list:                    
+                #     labor_var_1, labor_var_2 = labor.labor_presence_var(alt_1.id), labor.labor_presence_var(alt_2.id)                    
+                    # print(labor_var_1, labor_var_2, alt_1.interval_var, alt_2.interval_var)
+                    # self.AddNoOverlap([alt_1.interval_var, alt_2.interval_var]).OnlyEnforceIf(labor_var_1)
+                
+                    
         return
+
+    def set_cumulative(self):
+        for labortype in self.labor_type_dict.values():
+            self.AddCumulative(labortype.interval_var_list, labortype.demand_list, labortype.num_labor)
 
     # 2) 한 interval에 n명의 labor가 필요할 경우 n명이 선택되도록(num_presence)    
     # 2) 이것은 alt_interval별로 constraint을 걸어두되, constraint는 alt_presence가 True일 때만 작동
@@ -168,6 +191,8 @@ class Schedule(cp_model.CpModel):
             for task in zone.task_dependency:
                 if previous_task is not None:
                     self.Add(previous_task.end_var <= task.start_var)
+                previous_task = task
+                
         return       
       
     def set_makespan_objective(self):
