@@ -227,11 +227,11 @@ def flexible_zoneshop():
     print(result_zone_data)
     
     df = pd.DataFrame(result_zone_data)
-
+    n = len(zone_ends)
     colors = {}
     for i in range(n):
-            key = "%s" % (i + 1)
-            colors[key] = "rgb(%s, %s, %s)" % (rgb(), rgb(), rgb())
+        key = "%s" % (i + 1)
+        colors[key] = "rgb(%s, %s, %s)" % (rgb(), rgb(), rgb())
 
     fig = ff.create_gantt(
         df,

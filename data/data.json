@@ -3,12 +3,12 @@
         {
             "labor_id": "l1",
             "labor_name": "labor_1",
-            "number": 2
+            "number": 10
         },
         {
             "labor_id": "l2",
             "labor_name": "labor_2",
-            "number": 2
+            "number": 10
         },
         {
             "labor_id": "l3",
