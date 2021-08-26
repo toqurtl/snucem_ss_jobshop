@@ -19,9 +19,22 @@ with open(file_path, 'r') as f:
 schedule = Schedule(json_data)
 result = OptimalResult(schedule) 
 
-if result.is_optimal:     
-    result.optimal_schedule()
-    result.set_task_dict()
+if result.is_optimal:
+    print("schedule")    
+    for data in result.result_data:
+        print(data)
+    
+    print("시간별 task/alter")
+    for time, task in result.task_dict.items(): 
+        print(time, task)
+    
+    print("시간별 labor 숫자")    
+    for time, labor_info in result.num_labor_dict.items():
+        print(time, labor_info)
+
+    print("간트차트")
+    result.create_gantt("chart.html")
+
 
 
 
