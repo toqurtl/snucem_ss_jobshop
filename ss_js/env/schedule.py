@@ -1,16 +1,9 @@
-import collections
 from ss_js.env.env import Environment
-from ss_js.env.component.labor import LaborType, Labor
-from ss_js.env.component.task import Task, TaskType
+from ss_js.env.component.labor import LaborType
+from ss_js.env.component.task import Task
 from ss_js.env.component.zone import Zone
-from typing import Dict, List, Union
+from typing import Dict
 from ortools.sat.python import cp_model
-from functools import reduce
-from ss_js.parameters import ModelParams, Params
-import json
-from itertools import combinations
-
-
 # Variables in the model
 # 1) start_var, end_var, interval_var of task
 # 2) bool_var representing labor selected(alternative)
