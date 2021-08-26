@@ -1,26 +1,21 @@
-import collections
 from ss_js.env.component.task import Task, TaskType
 from ss_js.env.component.labor import Labor, LaborType
 from ss_js.env.component.zone import Zone
-from typing import Dict, List, Union
-from ortools.sat.python import cp_model
-from functools import reduce
-from ss_js.parameters import ModelParams, Params, ComponentParams
-import json
+from ss_js.parameters import ComponentParams
 
-# Input 데이터를 가지고 있음. 원하는 거 출력
+# Input 데이터를 받기 위한 class
+# labor_type, task_type, labor 정보를 가지고 있음
 class Environment(object):
     def __init__(self, data):         
         self.labor_type_dict = {} # str, labortype
         self.task_type_dict = {} # str, tasktype        
-        
         self.zone_dict = {} # zone
         self.task_dict = {}
         self.labor_dict = {} # (labor)
 
         self._initialize(data)
         
-    # 초기화
+    # =========================== 초기화를 위한 함수=====================================
     def _initialize(self, data):
         self._generate_labor_type_dict(data)
         self._generate_task_type_dict(data)
@@ -67,20 +62,19 @@ class Environment(object):
                 zone.task_dependency.append(task)
         return
 
-    # labor_type_id를 input하면 labor_pool에서 해당 labor들을 list 반환
+    # =========================== 데이터들을 정리해서 반환=====================================
+    # labor_type_id를 input하면 labor에서 해당 labor들을 list 반환
+    # deprecated
     def labor_list_of_type(self, labor_type_id):        
         return list(filter(lambda labor: labor.type_id == labor_type_id, self.labor_dict.values()))
 
-    # labor_type_id를 input하면 labor_pool에서 해당 labor 수를 반환
+    # labor_type_id를 input하면 해당 labor_type의 labor 수를 반환
     def num_labor_of_type(self, type: LaborType):
         return self.labor_type_dict[type.id].num_labor
 
     def labor_type(self, labor_type_str) -> LaborType:
         return self.labor_type_dict[labor_type_str]
-
-    def task_list(self):
-        return list(self.task_dict.values())
-
+        
     @property
     def max_horizon(self):
         horizon = 0        

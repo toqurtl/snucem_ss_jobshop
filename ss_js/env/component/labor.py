@@ -26,7 +26,7 @@ class LaborType(object):
     def capacity(self):
         return self.num_labor
 
-    
+# deprecated: 필요없을것 같음
 class Labor(object):
     id_list = []
     def __init__(self, labor_idx, type_id, env):     
