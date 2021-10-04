@@ -27,7 +27,7 @@ from itertools import combinations
 class Schedule(cp_model.CpModel):
     def __init__(self, data):
         super().__init__()
-        self.env = Environment(data)
+        self.env = Environment(data)        
         self.alter_dict = {}
         
 
@@ -106,14 +106,14 @@ class Schedule(cp_model.CpModel):
     # variable_1: task 관련
     def set_vars_of_task(self):
         for zone in self.zone_dict.values():
-            for task in zone.task_dependency:                
+            for task in zone.task_list:                
                 task.set_var(self, self.horizon)                
         return
 
     # variable_2: alter 관련
     def set_vars_of_alter(self):
         for zone in self.zone_dict.values():
-            for task in zone.task_dependency:
+            for task in zone.task_list:
                 for alt in task.alt_dict.values():
                     alt.set_var(self, self.horizon)
         return
@@ -132,11 +132,13 @@ class Schedule(cp_model.CpModel):
                 self.alter_presence_vars[task_id].append(alter.presence_var)   
         return
 
+    ## 수정_1005
     # zone들 중 마지막에 있는 task의 end_var을 별도로 저장
     def set_zone_ends(self):
         for zone in self.zone_dict.values():
-            last_task = zone.task_dependency[-1]
-            self.zone_ends.append(last_task.end_var)
+            # last_task = zone.task_list[-1]
+            for last_task in zone.last_task_list:       
+                self.zone_ends.append(last_task.end_var)
         return
 
     # 각 labor의 관련된 alt_interval들을 각 labor에 담아둠, set_labor_constraints와 관련된 것인데 향후 삭제할듯        
@@ -155,14 +157,17 @@ class Schedule(cp_model.CpModel):
         return
 
     ###################### constraints ###########################
-    # constraint_1: task간 순서 관련 constraints(zone의 task_dependency list 순서)
+    # constraint_1: task간 순서 관련 constraints(zone의 task_list list 순서)
+    ## 수정_1005
     def set_dependency_constraints(self):
         for zone in self.zone_dict.values():
-            previous_task = None
-            for task in zone.task_dependency:
-                if previous_task is not None:
-                    self.Add(previous_task.end_var <= task.start_var)
-                previous_task = task                
+            for pre_task, suc_task in zone.task_dependency:
+                self.Add(pre_task.end_var <= suc_task.start_var)
+            # previous_task = None
+            # for task in zone.task_list:
+            #     if previous_task is not None:
+            #         self.Add(previous_task.end_var <= task.start_var)
+            #     previous_task = task                
         return
     
     # constraint_2: 각 task의 alter들 중 하나만 선택되도록 하는 constraint

@@ -42,6 +42,9 @@ class Environment(object):
         zone_list = data.get(ComponentParams.ZONE.value)
         for zone_info in zone_list:
             zone = Zone(zone_info)
+            for last_task_type_id in zone.last_task_type_id_list:
+                last_task_type = self.task_type_dict[last_task_type_id]
+                zone.last_task_type_list.append(last_task_type)
             self.zone_dict[zone.id] = zone           
         # TODO - check data exception
         return
@@ -55,12 +58,19 @@ class Environment(object):
 
     def _generate_task_pool(self):
         for zone in self.zone_dict.values():
-            for task_type_str in zone.task_type_dependency:                
+            for task_type_str in zone.task_type_list:
                 task_type = self.task_type_dict[task_type_str]
                 task = Task(zone.id, task_type)
-                self.task_dict[task.id] = task       
-                zone.task_dependency.append(task)
+                self.task_dict[task.id] = task  
+                zone.task_list.append(task)
+
+        for zone in self.zone_dict.values():
+            for dep in zone.task_type_dependency:
+                pre_task_type, suc_task_type = self.task_type_dict[dep[0]], self.task_type_dict[dep[1]]
+                pre_task, suc_task = zone.task_of_type(pre_task_type), zone.task_of_type(suc_task_type)                
+                zone.task_dependency.append((pre_task, suc_task))
         return
+
 
     # =========================== 데이터들을 정리해서 반환=====================================
     # labor_type_id를 input하면 labor에서 해당 labor들을 list 반환
@@ -79,7 +89,7 @@ class Environment(object):
     def max_horizon(self):
         horizon = 0        
         for zone in self.zone_dict.values():
-            horizon += sum(map(lambda x: x.max_duration, zone.task_dependency))                   
+            horizon += sum(map(lambda x: x.max_duration, zone.task_list))                   
         return horizon       
         # fun
-        # return sum(map(lambda x: sum(map(lambda y: y.duration, x.task_dependency)), self.zone_dict.values()))
+        # return sum(map(lambda x: sum(map(lambda y: y.duration, x.task_list)), self.zone_dict.values()))

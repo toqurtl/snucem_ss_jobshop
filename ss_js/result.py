@@ -54,7 +54,7 @@ class OptimalResult(object):
         today = dt.today()
         start_date = dt(today.year,today.month,today.day)
         for zone in self.schedule.zone_dict.values():
-            for task in zone.task_dependency:
+            for task in zone.task_list:
                 start_value = self.solver.Value(task.start_var)                
                 end_value = self.solver.Value(task.end_var)                
                 for alter in task.alt_dict.values():

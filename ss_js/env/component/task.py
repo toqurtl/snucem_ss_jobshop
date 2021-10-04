@@ -12,6 +12,9 @@ class TaskType(object):
 
     def __str__(self):
         return self.id+"_"+self.name
+    
+    def __eq__(self, other):
+        return self.id == other.id
 
     @property
     def num_alternatives(self):

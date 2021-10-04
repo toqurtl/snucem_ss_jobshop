@@ -10,10 +10,12 @@ class Params(Enum):
     TASK_ID = "task_id"
     TASK_NAME = "task_name"
     DURATION = "duration"
+    TASK_LIST = "task_list"
     TASK_DEPENDENCY = "task_dependency"
     LABOR_SET = "labor_set"
     REQUIRED_LABOR = "required"
-    ALT_ID = "alt_id"   
+    ALT_ID = "alt_id"
+    LAST_TASK_TYPE = "last_task_type"  
 
 
 class ComponentParams(Enum):
