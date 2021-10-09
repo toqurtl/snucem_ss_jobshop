@@ -14,6 +14,8 @@ class Zone(object):
         self.task_list = []    
         self.task_dependency = []
         self.last_task_type_list = []
+        self.quantity = 0
+        self.vars = []
     
     def __str__(self):
         return self.id+"_"+self.name
@@ -33,4 +35,8 @@ class Zone(object):
         for task in self.task_list:            
             if task.type == task_type:
                 return task
+        return
+    
+    def set_var(self, model: cp_model.CpModel):
+        self.vars[ModelParams.SPACE_PRESENCE] = model.NewBoolVar('presence_' + self.id)
         return

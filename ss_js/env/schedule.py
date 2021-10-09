@@ -6,6 +6,8 @@ from ortools.sat.python import cp_model
 from typing import Dict
 from itertools import combinations
 
+from ss_js.parameters import ModelParams
+
 # Variables와 constraint를 설정함
 # 모델의 component
 # task, alter, labortype, labor(향후 삭제할듯)
@@ -46,6 +48,8 @@ class Schedule(cp_model.CpModel):
         self.set_alter_presence_vars()
         self.set_zone_ends()
         self.allocate_interval_vars_to_labor()
+
+        self.set_vars_of_space()
         # set constraints
         self.set_dependency_constraints()
         self.set_alter_constraints()
@@ -125,6 +129,11 @@ class Schedule(cp_model.CpModel):
                 self.alter_dict[alter.id] = alter
         return
 
+    # space 세팅
+    def set_space_of_dict(self):
+        for zone in self.zone_dict.values():
+            zone.set_var(self)
+
     # variable_1, 2: task/alter 관련(task_id에 해당하는 alter_presence_var들을 별도로 정리해둠: 향후 constraint를 쉽게 걸기 위함)
     def set_alter_presence_vars(self):
         for task_id, task in self.task_dict.items():        
@@ -188,7 +197,9 @@ class Schedule(cp_model.CpModel):
     def set_cumulative(self):
         for labortype in self.labor_type_dict.values():
             self.AddCumulative(labortype.interval_var_list, labortype.demand_list, labortype.num_labor)
-   
+    
+    # TODO - constraint_5) space끼리
+
     # 각 labor별 관련 interval들이 서로 중복되지 않게 함(향후 삭제, 현재 이거 적용시 solve되지 않음)
     # deprecated 
     def set_labor_interval_constraints(self):
@@ -211,6 +222,16 @@ class Schedule(cp_model.CpModel):
                     labor_num = alter.num_labor_type(labor_type_id)                            
                     self.Add(sum(labor_presence_var_list) == labor_num).OnlyEnforceIf(alter.presence_var)
         return      
+
+    # space간 겹치지 않도록
+    def set_space_presence_constraints(self):
+        for zone in self.zone_dict.values():
+            interval_var_list = []
+            for task in zone.task_list:
+                interval_var = task.vars[ModelParams.INTERVAL]
+                interval_var_list.append(interval_var)
+            self.AddNoOverlap(interval_var_list)
+
 
     # ====================== 최적화 목적 설정 ==============================
     def set_makespan_objective(self):
