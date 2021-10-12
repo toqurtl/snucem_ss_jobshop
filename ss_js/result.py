@@ -33,7 +33,7 @@ class OptimalResult(object):
         self.result_data = []
         self.figure_data = []
 
-        self.labor_dict = {} # type_id: [1,2,3,4,5]
+        self.labor_dict = {} # type_id: [1,2,3,4,5]        
         self.optimal_schedule()
         self.set_task_dict()
         return
@@ -53,31 +53,33 @@ class OptimalResult(object):
         time_delta = datetime.timedelta
         today = dt.today()
         start_date = dt(today.year,today.month,today.day)
-        for zone in self.schedule.zone_dict.values():
-            for task in zone.task_list:
-                start_value = self.solver.Value(task.start_var)                
-                end_value = self.solver.Value(task.end_var)                
-                for alter in task.alt_dict.values():
-                    if self.solver.Value(alter.presence_var):
-                        duration = alter.duration
-                        selected = alter.id
-                        labor_info = alter.info[Params.REQUIRED_LABOR]
-                self.figure_data.append(dict(
-                    Task=task.id,
-                    Start= start_date + time_delta(0, start_value),
-                    Finish=start_date + time_delta(0, end_value),
-                    complete=zone.id,
-                    Resource=zone.space_id_list[0]
-                ))
-                self.result_data.append([task.id, selected, start_value, end_value, labor_info])
+        # for zone in self.schedule.zone_dict.values():
+            # for task in zone.task_list:
+        for task in self.schedule.task_dict.values():            
+            start_value = self.solver.Value(task.start_var)                
+            end_value = self.solver.Value(task.end_var)                
+            for alter in task.alt_dict.values():
+                if self.solver.Value(alter.presence_var):
+                    duration = alter.duration
+                    selected = alter.id
+                    labor_info = alter.info[Params.REQUIRED_LABOR]
+            self.figure_data.append(dict(
+                Task=task.id,
+                Start= start_date + time_delta(0, start_value),
+                Finish=start_date + time_delta(0, end_value),
+                # complete=zone.id,
+                Resource=task.space_id_list[0]
+            ))
+            
+            self.result_data.append([task.id, selected, start_value, end_value, labor_info])
         return
 
     def create_gantt(self, data_path):
         df = pd.DataFrame(self.figure_data)
         pyplt = py.offline.plot
         colors = {
-            's1': 'rgb(255,0,0)',
-            's2': 'rgb(0, 255, 0)'
+            'm_cme4_1': 'rgb(255,0,0)',
+            'm_cme4_2': 'rgb(0, 255, 0)'
         }
         fig = ff.create_gantt(
             df,

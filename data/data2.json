@@ -3,12 +3,12 @@
         {
             "labor_id": "l1",
             "labor_name": "welder",
-            "number": 10
+            "number": 7
         },
         {
             "labor_id": "l2",
             "labor_name": "plumber",
-            "number": 10
+            "number": 7
         },
         {
             "labor_id": "l99",
@@ -20,6 +20,19 @@
         {
             "task_id": "A1",
             "task_name": "A1",
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required":{
+                            "l99": 1                             
+                        },                        
+                        "productivity": 1
+                    }
+                ]    
+        },
+        {
+            "task_id": "B1",
+            "task_name": "B1",
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -37,8 +50,8 @@
                 ]    
         },
         {
-            "task_id": "A2",
-            "task_name": "A2",
+            "task_id": "B2",
+            "task_name": "B2",
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -51,8 +64,8 @@
             ]            
         },
         {
-            "task_id": "A3",
-            "task_name": "A3",
+            "task_id": "B3",
+            "task_name": "B3",
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -63,118 +76,95 @@
                     }
             ]
         }
-    ],
-    "zone":[
-        {               
-            "zone_id": "z1",
-            "section_id": "m_cme_4",
-            "quantity": 5,            
-            "zone_name": "z1",
-            "space_id": ["s1"],
-
-            "task_list": ["A1", "A2","A3"],
-            "task_dependency":[
-                ["A1", "A2"],
-                ["A2", "A3"]
-            ],
-            "last_task_type": ["A3"]
-            
-        },
-        {
-            "zone_id": "z2",
-            "zone_name": "z2",
-            "quantity": 5,
-            "task_list": ["A1", "A2","A3"],
-            "task_dependency":[
-                ["A1", "A2"],
-                ["A2", "A3"]
-            ], 
-            "last_task_type": ["A3"],
-            "space_id": ["s2"]
-            
-        },
-
-        {
-            "zone_id": "z3",
-            "zone_name": "z3",
-            "quantity": 5,    
-            "task_list": ["A1", "A2","A3"],
-            "task_dependency":[
-                ["A1", "A2"],
-                ["A2", "A3"]
-            ], 
-            "last_task_type": ["A3"],
-            "space_id": ["s1", "s2"]
-        }
-    ],
+    ],   
     "space":[
         {
-            "space_id": "s1",
+            "space_id": "m_cme4_1",
             "space_name": "CME4_1",
             "module_type": "main",
             "section": "CME4",
             "detail_section": "1"
         },
         {
-            "space_id": "s2",
+            "space_id": "m_cme4_2",
             "space_name": "CME4_2",
             "module_type": "main",
             "section": "CME4",
             "detail_section": "2"
-        }       
+        },
+        {
+            "space_id": "m_cme4_3",
+            "space_name": "CME4_3",
+            "module_type": "main",
+            "section": "CME4",
+            "detail_section": "3"
+        },
+        {
+            "space_id": "m_cme4_4",
+            "space_name": "CME4_4",
+            "module_type": "main",
+            "section": "CME4",
+            "detail_section": "4"
+        },
+        {
+            "space_id": "m_cme4_5",
+            "space_name": "CME4_5",
+            "module_type": "main",
+            "section": "CME4",
+            "detail_section": "5"
+        }
     ],
     "work":[
         {
-            "work_id": "s_A1",
+            "work_id": "m_cme4_A1",
             "task_type_id": "A1",
-            "space_id": ["s1", "s2"],
+            "space_id": ["m_cme4_1", "m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "s1_B1",
+            "work_id": "m_cme4_1_B1",
             "task_type_id": "B1",
-            "space_id": ["s1"],
+            "space_id": ["m_cme4_1"],
             "quantity": 5
         },
         {
-            "work_id": "s1_B2",
+            "work_id": "m_cme4_1_B2",
             "task_type_id": "B2",
-            "space_id": ["s1"],
+            "space_id": ["m_cme4_1"],
             "quantity": 5
         },
         {
-            "work_id": "s1_B3",
+            "work_id": "m_cme4_1_B3",
             "task_type_id": "B3",
-            "space_id": ["s1"],
-            "duration": "5"
+            "space_id": ["m_cme4_1"],
+            "quantity": 5
         },
         {
-            "work_id": "s2_B1",
+            "work_id": "m_cme4_2_B1",
             "task_type_id": "B1",
-            "space_id": ["s2"],
+            "space_id": ["m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "s2_B2",
+            "work_id": "m_cme4_2_B2",
             "task_type_id": "B2",
-            "space_id": ["s2"],
+            "space_id": ["m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "s2_B3",
+            "work_id": "m_cme4_2_B3",
             "task_type_id": "B3",
-            "space_id": ["s2"],
-            "duration": "5"
+            "space_id": ["m_cme4_2"],
+            "quantity": 5
         }
     ],
     "dependency":[
-        ["s_A1", "s1_B1"],
-        ["s_A1", "s2_B1"],
-        ["s_A1", "s3_B1"],
-        ["s1_B1", "s1_B2"],
-        ["s1_B2", "s1_B3"],
-        ["s2_B1", "s2_B2"],
-        ["s2_B2", "s2_B3"]
+        ["m_cme4_A1", "m_cme4_1_B1"],
+        ["m_cme4_A1", "m_cme4_2_B1"],        
+        ["m_cme4_1_B1", "m_cme4_1_B2"],
+        ["m_cme4_1_B2", "m_cme4_1_B3"],
+        ["m_cme4_2_B1", "m_cme4_2_B2"],
+        ["m_cme4_2_B2", "m_cme4_2_B3"]
     ]
 
 }

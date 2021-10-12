@@ -5,8 +5,10 @@ class Params(Enum):
     LABOR_ID = "labor_id"
     LABOR_NAME = "labor_name"
     LABOR_NUMBER = "number"
-    ZONE_ID = "zone_id"
+    ZONE_ID = "zone_id"    
     ZONE_NAME = "zone_name"
+    WORK_ID = "work_id"
+    TASKTYPE_ID = "task_type_id"    
     TASK_ID = "task_id"
     TASK_NAME = "task_name"
     DURATION = "duration"
@@ -28,6 +30,7 @@ class Params(Enum):
 class ComponentParams(Enum):
     LABOR_TYPE = "labor_type"
     ZONE = "zone"
+    WORK = "work"
     TASK_TYPE = "task_type"
     LABOR = "labor"
     ALTER = "alt"
@@ -43,4 +46,5 @@ class ModelParams(Enum):
     LABOR_PRESENCE = 'labor_presence'
     ALT_PRESENCE = 'alt_presence'
     SPACE_PRESENCE = 'space_presence'
+    
     

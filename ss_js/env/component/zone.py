@@ -8,18 +8,18 @@ class Zone(object):
         self.id = zone_data.get(Params.ZONE_ID.value)
         self.name = zone_data.get(Params.ZONE_NAME.value)
         self.quantity = zone_data.get(Params.QUANTITY.value)
-        # depreceate
-        self.task_type_list = zone_data.get(Params.TASK_LIST.value)
-        self.task_type_dependency = zone_data.get(Params.TASK_DEPENDENCY.value)        
-        self.last_task_type_id_list = zone_data.get(Params.LAST_TASK_TYPE.value)
+        # # depreceate
+        # self.task_type_list = zone_data.get(Params.TASK_LIST.value)
+        # self.task_type_dependency = zone_data.get(Params.TASK_DEPENDENCY.value)        
+        # self.last_task_type_id_list = zone_data.get(Params.LAST_TASK_TYPE.value)
 
         self.space_id_list = zone_data.get(Params.SPACE_ID.value)
         self.space_list = []
 
-        # depreceate
-        self.task_list = []    
-        self.task_dependency = []
-        self.last_task_type_list = []
+        # # depreceate
+        # self.task_list = []    
+        # self.task_dependency = []
+        # self.last_task_type_list = []
 
         self.quantity = zone_data.get(Params.QUANTITY.value)
         self.vars = []

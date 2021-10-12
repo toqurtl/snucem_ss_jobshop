@@ -26,23 +26,24 @@ class TaskType(object):
     
 
 class Task(object):
-    def __init__(self, zone, task_type: TaskType):
-        self.zone = zone
-        self.id = zone.id +"_"+task_type.id        
-        self.type: TaskType = task_type        
+    def __init__(self, work_info, task_type: TaskType):            
+        self.id = work_info.get(Params.WORK_ID.value)
+        self.quantity = work_info.get(Params.QUANTITY.value)
+        # self.id = zone.id +"_"+task_type.id
+        self.type: TaskType = task_type
         self.vars = {            
             ModelParams.START: None,
             ModelParams.DURATION: None,
             ModelParams.END: None,
             ModelParams.INTERVAL: None,            
         }
-        self.space_id_list = zone.space_id_list
+        self.space_id_list = work_info.get(Params.SPACE_ID.value)
         self.alt_dict = {} # alt_id, alt        
         self._set_alt_dict()
 
     # zone의 quantity와 labor_set의 productivity로 duration을 계산
     def _set_alt_dict(self):
-        for labor_info in self.type.labor_info_list:
+        for labor_info in self.type.labor_info_list:            
             new_alt_id = self.id + "_alt" + str(labor_info[Params.ALT_ID.value])
             alter = Alter(new_alt_id, labor_info)
             alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])                       
@@ -50,10 +51,6 @@ class Task(object):
             alter.set_duration(duration)            
             self.alt_dict[new_alt_id] = alter
         return
-
-    @property
-    def quantity(self):
-        return self.zone.quantity
 
     @property
     def start_var(self):
@@ -81,7 +78,8 @@ class Task(object):
     
     def duration_range(self):
         # TODO - 수정 필요
-        min_du, max_du= 0, 9999
+        sample_du = list(self.alt_dict.values())[0].duration
+        min_du, max_du = sample_du, sample_du        
         for alt in self.alt_dict.values():            
             min_du, max_du = min(alt.duration, min_du), max(alt.duration, max_du)
         return min_du, max_du
@@ -136,7 +134,7 @@ class Task(object):
     def set_var(self, model: cp_model.CpModel, horizon):                
         min_du, max_du = self.min_duration, self.max_duration
         self.vars[ModelParams.START] = model.NewIntVar(0, horizon, self._suffix(ModelParams.START))        
-        self.vars[ModelParams.DURATION] = model.NewIntVar(min_du, max_du, self._suffix(ModelParams.DURATION))
+        self.vars[ModelParams.DURATION] = model.NewIntVar(min_du, max_du, self._suffix(ModelParams.DURATION))        
         self.vars[ModelParams.END] = model.NewIntVar(0, horizon, self._suffix(ModelParams.END))
         self.vars[ModelParams.INTERVAL] = model.NewIntervalVar(
             self.vars[ModelParams.START],

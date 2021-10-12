@@ -40,7 +40,7 @@ class Alter(object):
             self.vars[ModelParams.END], 
             self.vars[ModelParams.ALT_PRESENCE], 
             'interval_'+self.id,
-        )
+        )        
         
         return
     
