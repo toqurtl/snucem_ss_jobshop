@@ -2,6 +2,7 @@ from ss_js.env.env import Environment
 from ss_js.env.component.labor import LaborType
 from ss_js.env.component.task import Task
 from ss_js.env.component.zone import Zone
+from ss_js.env.component.space import Space
 from ortools.sat.python import cp_model
 from typing import Dict
 from itertools import combinations
@@ -48,13 +49,13 @@ class Schedule(cp_model.CpModel):
         self.set_alter_presence_vars()
         self.set_zone_ends()
         self.allocate_interval_vars_to_labor()
-
         self.set_vars_of_space()
         # set constraints
         self.set_dependency_constraints()
         self.set_alter_constraints()
         self.set_interval_to_alter()
         self.set_cumulative()
+        self.set_space_constraints()
         # self.set_labor_interval_constraints()
         # self.set_labor_presence_constraints()
         # set objective
@@ -85,6 +86,10 @@ class Schedule(cp_model.CpModel):
     @property # 모든 labor_type 정보
     def labor_type_dict(self) -> Dict[str, LaborType]:
         return self.env.labor_type_dict
+
+    @property
+    def space_dict(self) -> Dict[str, Space]:
+        return self.env.space_dict
 
     @property # 전체 기간의 가능한 최대 값
     def horizon(self):
@@ -165,6 +170,10 @@ class Schedule(cp_model.CpModel):
                     #     alter.set_labor(labor)                              
         return
 
+    ## 수정_1012
+    def set_vars_of_space(self):
+        pass
+
     ###################### constraints ###########################
     # constraint_1: task간 순서 관련 constraints(zone의 task_list list 순서)
     ## 수정_1005
@@ -224,13 +233,12 @@ class Schedule(cp_model.CpModel):
         return      
 
     # space간 겹치지 않도록
-    def set_space_presence_constraints(self):
-        for zone in self.zone_dict.values():
-            interval_var_list = []
-            for task in zone.task_list:
-                interval_var = task.vars[ModelParams.INTERVAL]
-                interval_var_list.append(interval_var)
-            self.AddNoOverlap(interval_var_list)
+    def set_space_constraints(self):
+        for space in self.space_dict.values():
+            for task in space.task_list:
+                space.interval_var_list.append(task.interval_var)
+            self.AddNoOverlap(space.interval_var_list)
+        return
 
 
     # ====================== 최적화 목적 설정 ==============================

@@ -1,0 +1,180 @@
+{
+    "labor_type":[
+        {
+            "labor_id": "l1",
+            "labor_name": "welder",
+            "number": 10
+        },
+        {
+            "labor_id": "l2",
+            "labor_name": "plumber",
+            "number": 10
+        },
+        {
+            "labor_id": "l99",
+            "labor_name": "dummy",
+            "number": 99
+        }
+    ],
+    "task_type":[
+        {
+            "task_id": "A1",
+            "task_name": "A1",
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required":{
+                            "l1": 1                             
+                        },                        
+                        "productivity": 1
+                    },{
+                        "alt_id": 1,
+                        "required":{
+                            "l1": 2                            
+                        },                        
+                        "productivity": 2
+                    }
+                ]    
+        },
+        {
+            "task_id": "A2",
+            "task_name": "A2",
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required": {
+                            "l2": 1
+                        },                        
+                        "productivity": 1
+                                        
+                    }
+            ]            
+        },
+        {
+            "task_id": "A3",
+            "task_name": "A3",
+            "labor_set":[
+                    {
+                        "alt_id": 0,
+                        "required": {
+                            "l2": 1
+                        },                        
+                        "productivity": 1
+                    }
+            ]
+        }
+    ],
+    "zone":[
+        {               
+            "zone_id": "z1",
+            "section_id": "m_cme_4",
+            "quantity": 5,            
+            "zone_name": "z1",
+            "space_id": ["s1"],
+
+            "task_list": ["A1", "A2","A3"],
+            "task_dependency":[
+                ["A1", "A2"],
+                ["A2", "A3"]
+            ],
+            "last_task_type": ["A3"]
+            
+        },
+        {
+            "zone_id": "z2",
+            "zone_name": "z2",
+            "quantity": 5,
+            "task_list": ["A1", "A2","A3"],
+            "task_dependency":[
+                ["A1", "A2"],
+                ["A2", "A3"]
+            ], 
+            "last_task_type": ["A3"],
+            "space_id": ["s2"]
+            
+        },
+
+        {
+            "zone_id": "z3",
+            "zone_name": "z3",
+            "quantity": 5,    
+            "task_list": ["A1", "A2","A3"],
+            "task_dependency":[
+                ["A1", "A2"],
+                ["A2", "A3"]
+            ], 
+            "last_task_type": ["A3"],
+            "space_id": ["s1", "s2"]
+        }
+    ],
+    "space":[
+        {
+            "space_id": "s1",
+            "space_name": "CME4_1",
+            "module_type": "main",
+            "section": "CME4",
+            "detail_section": "1"
+        },
+        {
+            "space_id": "s2",
+            "space_name": "CME4_2",
+            "module_type": "main",
+            "section": "CME4",
+            "detail_section": "2"
+        }       
+    ],
+    "work":[
+        {
+            "work_id": "s_A1",
+            "task_type_id": "A1",
+            "space_id": ["s1", "s2"],
+            "quantity": 5
+        },
+        {
+            "work_id": "s1_B1",
+            "task_type_id": "B1",
+            "space_id": ["s1"],
+            "quantity": 5
+        },
+        {
+            "work_id": "s1_B2",
+            "task_type_id": "B2",
+            "space_id": ["s1"],
+            "quantity": 5
+        },
+        {
+            "work_id": "s1_B3",
+            "task_type_id": "B3",
+            "space_id": ["s1"],
+            "duration": "5"
+        },
+        {
+            "work_id": "s2_B1",
+            "task_type_id": "B1",
+            "space_id": ["s2"],
+            "quantity": 5
+        },
+        {
+            "work_id": "s2_B2",
+            "task_type_id": "B2",
+            "space_id": ["s2"],
+            "quantity": 5
+        },
+        {
+            "work_id": "s2_B3",
+            "task_type_id": "B3",
+            "space_id": ["s2"],
+            "duration": "5"
+        }
+    ],
+    "dependency":[
+        ["s_A1", "s1_B1"],
+        ["s_A1", "s2_B1"],
+        ["s_A1", "s3_B1"],
+        ["s1_B1", "s1_B2"],
+        ["s1_B2", "s1_B3"],
+        ["s2_B1", "s2_B2"],
+        ["s2_B2", "s2_B3"]
+    ]
+
+}

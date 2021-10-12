@@ -1,258 +1,69 @@
-{    
+{
     "labor_type":[
         {
             "labor_id": "l1",
-            "labor_name": "용접사",
+            "labor_name": "용접공",
             "number": 10
         },
         {
             "labor_id": "l2",
-            "labor_name": "조공",
-            "number": 20
+            "labor_name": "배관공",
+            "number": 10
         },
         {
             "labor_id": "l3",
-            "labor_name": "배관사",
-            "number": 20
-        },
-        {
-            "labor_id": "dummy",
             "labor_name": "dummy",
-            "number": 1000
+            "number": 3
         }
     ],
-    "task_type":[        {   
-            
-            "task_id": "A0",
-            "task_name": "모듈 반입",
-            "worktype_id": "s-gas",
-            "labor_set":[
-                    {
-                        "alt_id": 0,
-                        "required":{
-                            "l1": 1                            
-                        },
-                        "duration": 5
-                    },{
-                        "alt_id": 1,
-                        "required":{
-                            "l1": 2                            
-                        },
-                        "duration": 3
-                    }
-                ]    
+    "space":[
+        {
+            "space_id":"m_cme4_1",
+            "module_type": "module",
+            "zone": "CME4",
+            "section": 1
         },
         {
-            "task_id": "A1",
-            "task_name": "배관설치",
-            "labor_set":[
-                    {
-                        "alt_id": 0,
-                        "required": {
-                            "l3": 2
-                        },
-                        "duration": 5                    
-                    }
-            ]            
+            "space_id":"m_cme4_2",
+            "module_type": "module",
+            "zone": "CME4",
+            "section": 2
         },
         {
-            "task_id": "A2",
-            "task_name": "용접",
-            "labor_set":[
-                    {
-                        "alt_id": 0,
-                        "required":{
-                            "l1": 2,
-                            "l2": 1
-                        },
-                        "duration": 5
-                 }                
-                ]                
+            "space_id":"m_cme4_3",
+            "module_type": "module",
+            "zone": "CME4",
+            "section": 3
         }
-
     ],
-    "worktype": [
-                {   
-                    "worktype_id": "s-gas",
-                    "worktype_name": "s-gas",
-                    "task_list": ["A0", "A1","A2"],
-                    "task_dependency":[
-                        ["A0", "A1"],
-                        ["A1", "A2"]
-                    ],
-                    "last_task_type": ["A2"]
-                }        
-    ],
-    "space": [
+    "task_type":[
         {
-            "space_id": "CME4-1",
-            "space_name": "CME4-1",
-            "module_type": "main"
-        },
-        {
-            "space_id": "CEP13-1",
-            "space_name": "CPE13-1",
-            "module_type": "lateral"
-        } 
+            "task_typeid": "A1",
+            "work_package_id": "A",
+            "work_package_name": "모듈설치",
+            "detail_id": "1",
+            "detail_name": "모듈반입"            
+        }
     ],
     "work":[
         {
-            "space_id": "CME4-1",
-            "work_id": "work_1",
-            "quantity": 435
-        },
-        {
-            "space_id": "CEP13-1",
-            "work_id": "work_2",
-            "quantity": 83
-        }
+            "work_id": "m_cme4_A1",
+            "task_type_id":"A1",
+            "space_id":[
+                "m_cme4_1", "m_cme4_2", "m_cme4_3"
+            ],
+            "quantity": 53,
+            "labor":[
+                {
+                    "labor_id": "l1",
+                    "num_labor": 1,
+                    "duration": 5
+                }
 
+            ]
+        }
     ],
-    "zone":[      
-        {
-            "zone_id": "CME4-1",
-            "zone_name": "CME4-1",
-            "qauntity": 435,
-            "module_type": "main",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CME4-2",
-            "zone_name": "CME4-2",
-            "qauntity": 435,
-            "module_type": "main",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CME4-3",
-            "zone_name": "CME4-3",
-            "qauntity": 435,
-            "module_type": "main",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CME4-4",
-            "zone_name": "CME4-4",
-            "qauntity": 435,
-            "module_type": "main",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CME4-5",
-            "zone_name": "CME4-5",
-            "qauntity": 435,
-            "module_type": "main",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-1",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-2",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-3",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-4",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-5",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-6",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        },
-        {
-            "zone_id": "CEP-13-7",
-            "zone_name": "z2",
-            "quantity": 83,
-            "module_type": "lateral",
-            "task_list": ["A0", "A1","A2"],
-            "task_dependency":[
-                ["A0", "A1"],
-                ["A1", "A2"]
-            ],
-            "last_task_type": ["A2"]
-        }
+    "dependency": [
+        []
     ]
-
 }

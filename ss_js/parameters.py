@@ -10,12 +10,19 @@ class Params(Enum):
     TASK_ID = "task_id"
     TASK_NAME = "task_name"
     DURATION = "duration"
+    # deprecated
     TASK_LIST = "task_list"
+    # deprecated
     TASK_DEPENDENCY = "task_dependency"
     LABOR_SET = "labor_set"
     REQUIRED_LABOR = "required"
     ALT_ID = "alt_id"
-    LAST_TASK_TYPE = "last_task_type"  
+    # deprecated
+    LAST_TASK_TYPE = "last_task_type" 
+    SPACE_ID = "space_id" 
+    SPACE_NAME = "space_name"
+    PRODUCTVITY = "productivity"
+    QUANTITY = "quantity"
 
 
 class ComponentParams(Enum):
@@ -24,6 +31,8 @@ class ComponentParams(Enum):
     TASK_TYPE = "task_type"
     LABOR = "labor"
     ALTER = "alt"
+    SPACE = "space"
+    DEPENDENCY = "dependency"    
 
 
 class ModelParams(Enum):

@@ -23,47 +23,37 @@ class TaskType(object):
     @property
     def alt_id_list(self):        
         return [labor_set[Params.ALT_ID.value] for labor_set in self.labor_info_list]
-        
-    @property
-    def min_du(self):
-        min_du, _ = self._duration_range()
-        return min_du
-
-    @property
-    def max_du(self):
-        _, max_du = self._duration_range()
-        return max_du
-
-    def _duration_range(self):
-        min_du = self.labor_info_list[0][Params.DURATION.value]
-        max_du = self.labor_info_list[0][Params.DURATION.value]
-        for labor_info in self.labor_info_list:
-            alt_du = labor_info[Params.DURATION.value]
-            min_du, max_du = min(alt_du, min_du), max(alt_du, max_du)
-        return min_du, max_du
-
+    
 
 class Task(object):
-    def __init__(self, zone_id, task_type: TaskType):
-        self.id = zone_id +"_"+task_type.id
+    def __init__(self, zone, task_type: TaskType):
+        self.zone = zone
+        self.id = zone.id +"_"+task_type.id        
         self.type: TaskType = task_type        
         self.vars = {            
             ModelParams.START: None,
             ModelParams.DURATION: None,
             ModelParams.END: None,
-            ModelParams.INTERVAL: None
+            ModelParams.INTERVAL: None,            
         }
-        self.alt_dict = {} # alt_id, alt       
+        self.space_id_list = zone.space_id_list
+        self.alt_dict = {} # alt_id, alt        
         self._set_alt_dict()
 
+    # zone의 quantity와 labor_set의 productivity로 duration을 계산
     def _set_alt_dict(self):
         for labor_info in self.type.labor_info_list:
             new_alt_id = self.id + "_alt" + str(labor_info[Params.ALT_ID.value])
             alter = Alter(new_alt_id, labor_info)
-            alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])
-            alter.set_duration(labor_info[Params.DURATION.value])
+            alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])                       
+            duration = round(self.quantity / labor_info[Params.PRODUCTVITY.value])            
+            alter.set_duration(duration)            
             self.alt_dict[new_alt_id] = alter
         return
+
+    @property
+    def quantity(self):
+        return self.zone.quantity
 
     @property
     def start_var(self):
@@ -88,18 +78,23 @@ class Task(object):
     @property
     def type_name(self):
         return self.type.name
-
-    @property
+    
     def duration_range(self):
-        return self.type.duration_range()
+        # TODO - 수정 필요
+        min_du, max_du= 0, 9999
+        for alt in self.alt_dict.values():            
+            min_du, max_du = min(alt.duration, min_du), max(alt.duration, max_du)
+        return min_du, max_du
 
     @property
     def max_duration(self):
-        return self.type.max_du
+        min_du, max_du = self.duration_range()        
+        return max_du
 
     @property
     def min_duration(self):
-        return self.type.min_du
+        min_du, max_du = self.duration_range()        
+        return min_du
 
     @property
     def alt_keys(self):
@@ -138,8 +133,8 @@ class Task(object):
         return self.alt_dict[alt_id].duration
 
     # task의 interval var을 세팅함(interval_var는 start-duration-end로 구성)
-    def set_var(self, model: cp_model.CpModel, horizon):        
-        min_du, max_du = self.type.min_du, self.type.max_du        
+    def set_var(self, model: cp_model.CpModel, horizon):                
+        min_du, max_du = self.min_duration, self.max_duration
         self.vars[ModelParams.START] = model.NewIntVar(0, horizon, self._suffix(ModelParams.START))        
         self.vars[ModelParams.DURATION] = model.NewIntVar(min_du, max_du, self._suffix(ModelParams.DURATION))
         self.vars[ModelParams.END] = model.NewIntVar(0, horizon, self._suffix(ModelParams.END))

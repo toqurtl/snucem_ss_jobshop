@@ -1,6 +1,7 @@
 from ss_js.env.component.task import Task, TaskType
 from ss_js.env.component.labor import Labor, LaborType
 from ss_js.env.component.zone import Zone
+from ss_js.env.component.space import Space
 from ss_js.parameters import ComponentParams
 
 # Input 데이터를 받기 위한 class
@@ -12,6 +13,9 @@ class Environment(object):
         self.zone_dict = {} # zone
         self.task_dict = {}
         self.labor_dict = {} # (labor)
+        
+        # 수정 1012
+        self.space_dict = {}
 
         self._initialize(data)
         
@@ -19,9 +23,11 @@ class Environment(object):
     def _initialize(self, data):
         self._generate_labor_type_dict(data)
         self._generate_task_type_dict(data)
+        self._generate_space_dict(data)        
         self._generate_zone_dict(data)
         self._generate_labor_dict()
         self._generate_task_pool()
+        
         return
 
     def _generate_labor_type_dict(self, data):
@@ -42,11 +48,21 @@ class Environment(object):
         zone_list = data.get(ComponentParams.ZONE.value)
         for zone_info in zone_list:
             zone = Zone(zone_info)
+            for space_id in zone.space_id_list:                
+                zone.space_list.append(self.space_dict[space_id])
             for last_task_type_id in zone.last_task_type_id_list:
                 last_task_type = self.task_type_dict[last_task_type_id]
                 zone.last_task_type_list.append(last_task_type)
             self.zone_dict[zone.id] = zone           
         # TODO - check data exception
+        return
+    
+    # 수정 1012
+    def _generate_space_dict(self, data):
+        space_list = data.get(ComponentParams.SPACE.value)
+        for space_info in space_list:
+            space = Space(space_info)
+            self.space_dict[space.id] = space
         return
     
     def _generate_labor_dict(self):        
@@ -60,9 +76,9 @@ class Environment(object):
         for zone in self.zone_dict.values():
             for task_type_str in zone.task_type_list:
                 task_type = self.task_type_dict[task_type_str]
-                task = Task(zone.id, task_type)
+                task = Task(zone, task_type)
                 self.task_dict[task.id] = task  
-                zone.task_list.append(task)
+                zone.add_task(task)           
 
         for zone in self.zone_dict.values():
             for dep in zone.task_type_dependency:
@@ -70,6 +86,9 @@ class Environment(object):
                 pre_task, suc_task = zone.task_of_type(pre_task_type), zone.task_of_type(suc_task_type)                
                 zone.task_dependency.append((pre_task, suc_task))
         return
+    
+    
+
 
 
     # =========================== 데이터들을 정리해서 반환=====================================

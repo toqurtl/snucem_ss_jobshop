@@ -66,7 +66,8 @@ class OptimalResult(object):
                     Task=task.id,
                     Start= start_date + time_delta(0, start_value),
                     Finish=start_date + time_delta(0, end_value),
-                    complete=zone.id
+                    complete=zone.id,
+                    Resource=zone.space_id_list[0]
                 ))
                 self.result_data.append([task.id, selected, start_value, end_value, labor_info])
         return
@@ -74,8 +75,14 @@ class OptimalResult(object):
     def create_gantt(self, data_path):
         df = pd.DataFrame(self.figure_data)
         pyplt = py.offline.plot
+        colors = {
+            's1': 'rgb(255,0,0)',
+            's2': 'rgb(0, 255, 0)'
+        }
         fig = ff.create_gantt(
-            df,            
+            df,
+            colors= colors,
+            index_col='Resource',
             show_colorbar = True,
             group_tasks = True
         )
