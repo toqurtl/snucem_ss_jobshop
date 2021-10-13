@@ -128,7 +128,7 @@ class Environment(object):
     @property
     def max_horizon(self):
         horizon = 0
-        for task in self.task_dict.values():
+        for task in self.task_dict.values():            
             horizon += task.max_duration
         # for zone in self.zone_dict.values():
         #     horizon += sum(map(lambda x: x.max_duration, zone.task_list))                   

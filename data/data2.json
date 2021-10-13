@@ -18,28 +18,26 @@
     ],
     "task_type":[
         {
-            "task_id": "A1",
-            "task_name": "A1",
+            "task_id": "A1",            
             "labor_set":[
                     {
                         "alt_id": 0,
                         "required":{
                             "l99": 1                             
                         },                        
-                        "productivity": 1
+                        "productivity": 1.0
                     }
                 ]    
         },
         {
-            "task_id": "B1",
-            "task_name": "B1",
+            "task_id": "B1",            
             "labor_set":[
                     {
                         "alt_id": 0,
                         "required":{
                             "l1": 1                             
                         },                        
-                        "productivity": 1
+                        "productivity": 1.0
                     },{
                         "alt_id": 1,
                         "required":{
@@ -50,8 +48,7 @@
                 ]    
         },
         {
-            "task_id": "B2",
-            "task_name": "B2",
+            "task_id": "B2",            
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -64,8 +61,7 @@
             ]            
         },
         {
-            "task_id": "B3",
-            "task_name": "B3",
+            "task_id": "B3",            
             "labor_set":[
                     {
                         "alt_id": 0,

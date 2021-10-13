@@ -1,9 +1,24 @@
 import collections
 from ortools.sat.python import cp_model
 import openpyxl
+import json
 
-dir_txt = "data/input.xlsx"
+dir_txt = "data/input2.xlsx"
 # read_space_raw
+def get_section_list(dir_txt):
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel['space_raw']
+    ctn = 0
+    section_list = []
+    for row in excel_ws.iter_rows():
+        if ctn > 0:
+            section = row[1].value
+            section_list.append(section)
+        ctn += 1
+
+    return section_list
+    
+
 def get_space_list(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
     excel_ws = excel['space_raw']
@@ -18,10 +33,10 @@ def get_space_list(dir_txt):
                 {
                     "space_id": zone,
                     "module_type": "module",
-                    "upper_space": None,
-                    "detail": 0,
+                    "section": zone,
+                    "detail_section": 0,
                     "is_module": True,
-                    "quantity": 1
+                    "quantity": 5
                 }
             )
             for idx in range(1, num_section + 1):
@@ -29,14 +44,35 @@ def get_space_list(dir_txt):
                     {
                         "space_id": zone+"_"+str(idx),
                         "module_type": module_type,
-                        "upper_space": zone,
-                        "detail": idx,
+                        "section": zone,
+                        "detail_section": idx,
                         "is_module": False,
                         "quantity": round(quantity / num_section)
                     }
                 )
         ctn += 1
     return space_list
+
+
+def get_alt_id_list(task_id_arg, dir_txt):
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel['alt_raw']    
+    alt_id_list = []
+    for idx, row in enumerate(excel_ws.iter_rows()):
+        if idx > 0:
+            task_id, alt_id, required_labor, required_number, productivity = \
+                row[0].value, row[1].value, row[2].value, row[3].value, float(row[4].value)
+            if task_id == task_id_arg:
+                alt_id_list.append({
+                    "alt_id": alt_id,
+                    "required":{
+                        required_labor: required_number
+                    },
+                    "productivity": productivity
+                })
+    
+    return alt_id_list
+
 
 def get_tasktype_list(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
@@ -45,8 +81,9 @@ def get_tasktype_list(dir_txt):
     tasktype_list = []    
     for row in excel_ws.iter_rows():        
         if ctn > 0:
-            work_id, workpackage_id, workpackage_name, detail_id, detail_name, is_module, productivity \
-                = row[0].value, row[1].value, row[2].value, row[3].value, row[4].value, bool(row[5].value), float(row[6].value)
+            work_id, workpackage_id, workpackage_name, detail_id, detail_name, is_module \
+                = row[0].value, row[1].value, row[2].value, row[3].value, row[4].value, bool(row[5].value)
+            
             tasktype_list.append({
                 "task_id": work_id,
                 "workpackage_id": workpackage_id,
@@ -54,7 +91,8 @@ def get_tasktype_list(dir_txt):
                 "detail_id": detail_id,
                 "task_name": detail_name,
                 "is_module": is_module,
-                "productivity": productivity
+                "labor_set": get_alt_id_list(work_id, dir_txt)
+                
             })
         ctn += 1
     return tasktype_list
@@ -62,37 +100,162 @@ def get_tasktype_list(dir_txt):
 def get_low_space_list(space_id, space_list):
     low_space_list = []
     for space in space_list:
-        if space["upper_space"] == space_id:
+        if space["section"] == space_id and not space["is_module"]:
             low_space_list.append(space["space_id"])
     return low_space_list
 
 
-# print(get_space_list(dir_txt))
+def get_labor_type_list(dir_txt):
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel['labor_raw']    
+    labor_list = []
+    ctn = 0    
+    for row in excel_ws.iter_rows():        
+        if ctn > 0:
+            labor_id, labor_name, number \
+                = row[0].value, row[1].value, int(row[2].value)
+            
+            labor_list.append({
+                "labor_id": labor_id,
+                "labor_name": labor_name,
+                "number": number
+            })
+        ctn += 1
+    
+    return labor_list
+
+
+def get_work_list(dir_txt):
+    space_list = get_space_list(dir_txt)
+    tasktype_list = get_tasktype_list(dir_txt)
+    work_list = []
+    for space in space_list:    
+        space_id = space["space_id"]    
+        for tasktype in tasktype_list:
+            if space["is_module"]:
+                if tasktype["is_module"]:
+                    work_id = space_id + "_" + tasktype["task_id"]                
+                    work_list.append({
+                        "work_id": work_id,
+                        "task_type_id": tasktype["task_id"],
+                        "quantity": space["quantity"],                    
+                        "space_id": get_low_space_list(space_id, space_list),
+                        "section": space["section"],
+                        "workpackage_id": tasktype["workpackage_id"],
+                        "is_module": tasktype["is_module"]
+                    })
+                    
+            else:
+                if not tasktype["is_module"]:
+                    work_id = space_id + "_" + tasktype["task_id"]
+                    work_list.append({
+                        "work_id": work_id,
+                        "task_type_id": tasktype["task_id"],
+                        "quantity": space["quantity"],
+                        "space_id": [space_id],
+                        "section": space["section"],
+                        "workpackage_id": tasktype["workpackage_id"],
+                        "is_module": tasktype["is_module"]
+                    })
+    return work_list
+
+
+def get_work_of_section(section, work_list):
+    new_work_list = []
+    for work in work_list:
+        if work["section"] == section:
+            new_work_list.append(work)
+    return new_work_list
+
+
+def get_work_of_space(space_id, work_list):
+    new_work_list = []    
+    for work in work_list:        
+        if len(work["space_id"]) == 1 and work["space_id"][0] == space_id:
+            new_work_list.append(work)
+    return new_work_list
+
+
+def get_work(task_type_id, work_list):
+    new_work_list = []
+    for work in work_list:        
+        if task_type_id == work["task_type_id"]:
+            new_work_list.append(work)
+    return new_work_list
+
+
+def get_dependency_list(dir_txt):    
+    section_list = get_section_list(dir_txt)
+    space_list = get_space_list(dir_txt)
+    work_list = get_work_list(dir_txt)
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel['dep_raw']    
+    dep_list = []
+    # 모듈 내 세부공종들
+    for space in space_list:
+        if not space["is_module"]:
+            works_of_space = get_work_of_space(space["space_id"], work_list)                         
+            ctn = 0
+            for row in excel_ws.iter_rows():        
+                if ctn > 0:
+                    pre, pre_workpackage, suc, suc_workpackage = \
+                        row[0].value, row[1].value, row[2].value, row[3].value
+                    if pre_workpackage != "Z":                    
+                        pre_work = get_work(pre, works_of_space)[0]
+                        suc_work = get_work(suc, works_of_space)[0]                  
+                        dep_list.append([pre_work["work_id"], suc_work["work_id"]])
+                ctn += 1
+
+    
+    for section in section_list:
+        works_of_section = get_work_of_section(section, work_list)
+        ctn = 0
+        for row in excel_ws.iter_rows():
+            if ctn > 0:
+                pre, pre_workpackage, suc, suc_workpackage = \
+                    row[0].value, row[1].value, row[2].value, row[3].value
+                # 모듈과 그 안의 공종들
+                if pre_workpackage == "Z" and suc_workpackage != "Z":                    
+                    pre_work = get_work(pre, works_of_section)[0]
+                    suc_work_list = get_work(suc, works_of_section)
+                    for suc_work in suc_work_list:
+                        dep_list.append([pre_work["work_id"], suc_work["work_id"]])
+                        pass
+                # 모듈간 공종들
+                elif pre_workpackage =="Z" and suc_workpackage == "Z":
+                    pre_work = get_work(pre, works_of_section)[0]
+                    suc_work = get_work(suc, works_of_section)[0]
+                    dep_list.append([pre_work["work_id"], suc_work["work_id"]])
+            ctn += 1
+    return dep_list
+
+
+labor_list = get_labor_type_list(dir_txt)
+task_type_list = get_tasktype_list(dir_txt)
+work_list = get_work_list(dir_txt)
 space_list = get_space_list(dir_txt)
-tasktype_list = get_tasktype_list(dir_txt)
-work_list = []
-for space in space_list:    
-    space_id = space["space_id"]    
-    for tasktype in tasktype_list:
-        if space["is_module"]:
-            if tasktype["is_module"]:
-                work_id = space_id + "_" + tasktype["task_id"]                
-                work_list.append({
-                    "work_id": work_id,
-                    "task_id": tasktype["task_id"],
-                    "quantity": space["quantity"],                    
-                    "space_id_list": get_low_space_list(space_id, space_list)
-                })
-                
-        else:
-            if not tasktype["is_module"]:
-                work_id = space_id + "_" + tasktype["task_id"]
-                work_list.append({
-                    "work_id": work_id,
-                    "task_id": tasktype["task_id"],
-                    "quantity": space["quantity"],
-                    "space_id_list": [space_id]
-                })
-for work in work_list:
-    print(work)        
-        
+dep_list = get_dependency_list(dir_txt)
+data = {
+    "labor_type": labor_list,
+    "task_type": task_type_list,
+    "work": work_list,
+    "space": space_list,
+    "dependency": dep_list
+}
+
+# print(json.dumps(data, ensure_ascii=False, indent="\t"))
+
+with open('data/generated2.json', 'w', encoding="utf-8") as make_file:
+    json.dump(data, make_file, ensure_ascii=False, indent="\t")
+
+# for space in space_list:
+#     print(space)
+# for work in work_list:
+#     print(work)
+# work_list = get_work_list(dir_txt)
+# tasktype_list = get_tasktype_list(dir_txt)
+# for work in work_list:
+#     tasktype_id = work["task_type_id"]    
+#     for tasktype in tasktype_list:
+#         if tasktype["task_id"] == tasktype_id:
+#             pass

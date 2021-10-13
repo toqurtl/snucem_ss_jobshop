@@ -77,7 +77,7 @@ class Task(object):
         return self.type.name
     
     def duration_range(self):
-        # TODO - 수정 필요
+        # TODO - 수정 필요        
         sample_du = list(self.alt_dict.values())[0].duration
         min_du, max_du = sample_du, sample_du        
         for alt in self.alt_dict.values():            

@@ -116,7 +116,7 @@ class Schedule(cp_model.CpModel):
     #################### set_var #######################
     # variable_1: task 관련
     def set_vars_of_task(self):
-        for task in self.task_dict.values():
+        for task in self.task_dict.values():            
             task.set_var(self, self.horizon)            
         
         # for zone in self.zone_dict.values():

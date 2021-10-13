@@ -1,0 +1,228 @@
+{
+	"labor_type": [
+		{
+			"labor_id": "l1",
+			"labor_name": "welder",
+			"number": 7
+		},
+		{
+			"labor_id": "l2",
+			"labor_name": "plumber",
+			"number": 7
+		},
+		{
+			"labor_id": "l99",
+			"labor_name": "dummy",
+			"number": 88
+		}
+	],
+	"task_type": [
+		{
+			"task_id": "Z1",
+			"workpackage_id": "Z",
+			"workpackage_name": "모듈설치",
+			"detail_id": 1,
+			"task_name": "모듈반입",
+			"is_module": true,
+			"labor_set": [
+				{
+					"alt_id": 0,
+					"required": {
+						"l99": 5
+					},
+					"productivity": 1.0
+				}
+			]
+		},
+		{
+			"task_id": "A1",
+			"workpackage_id": "A",
+			"workpackage_name": "S-gas",
+			"detail_id": 1,
+			"task_name": "배관설치",
+			"is_module": false,
+			"labor_set": [
+				{
+					"alt_id": 0,
+					"required": {
+						"l1": 1
+					},
+					"productivity": 1.0
+				},
+				{
+					"alt_id": 1,
+					"required": {
+						"l1": 2
+					},
+					"productivity": 2.0
+				}
+			]
+		},
+		{
+			"task_id": "A2",
+			"workpackage_id": "A",
+			"workpackage_name": "S-gas",
+			"detail_id": 2,
+			"task_name": "용접",
+			"is_module": false,
+			"labor_set": [
+				{
+					"alt_id": 0,
+					"required": {
+						"l2": 1
+					},
+					"productivity": 1.0
+				}
+			]
+		},
+		{
+			"task_id": "A3",
+			"workpackage_id": "A",
+			"workpackage_name": "S-gas",
+			"detail_id": 3,
+			"task_name": "검사",
+			"is_module": false,
+			"labor_set": [
+				{
+					"alt_id": 0,
+					"required": {
+						"l99": 1
+					},
+					"productivity": 1.0
+				}
+			]
+		}
+	],
+	"work": [
+		{
+			"work_id": "cme4_Z1",
+			"task_type_id": "Z1",
+			"quantity": 5,
+			"space_id": [
+				"cme4_1",
+				"cme4_2"
+			],
+			"section": "cme4",
+			"workpackage_id": "Z",
+			"is_module": true
+		},
+		{
+			"work_id": "cme4_1_A1",
+			"task_type_id": "A1",
+			"quantity": 5,
+			"space_id": [
+				"cme4_1"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		},
+		{
+			"work_id": "cme4_1_A2",
+			"task_type_id": "A2",
+			"quantity": 5,
+			"space_id": [
+				"cme4_1"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		},
+		{
+			"work_id": "cme4_1_A3",
+			"task_type_id": "A3",
+			"quantity": 5,
+			"space_id": [
+				"cme4_1"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		},
+		{
+			"work_id": "cme4_2_A1",
+			"task_type_id": "A1",
+			"quantity": 5,
+			"space_id": [
+				"cme4_2"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		},
+		{
+			"work_id": "cme4_2_A2",
+			"task_type_id": "A2",
+			"quantity": 5,
+			"space_id": [
+				"cme4_2"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		},
+		{
+			"work_id": "cme4_2_A3",
+			"task_type_id": "A3",
+			"quantity": 5,
+			"space_id": [
+				"cme4_2"
+			],
+			"section": "cme4",
+			"workpackage_id": "A",
+			"is_module": false
+		}
+	],
+	"space": [
+		{
+			"space_id": "cme4",
+			"module_type": "module",
+			"section": "cme4",
+			"detail_section": 0,
+			"is_module": true,
+			"quantity": 5
+		},
+		{
+			"space_id": "cme4_1",
+			"module_type": "Main",
+			"section": "cme4",
+			"detail_section": 1,
+			"is_module": false,
+			"quantity": 5
+		},
+		{
+			"space_id": "cme4_2",
+			"module_type": "Main",
+			"section": "cme4",
+			"detail_section": 2,
+			"is_module": false,
+			"quantity": 5
+		}
+	],
+	"dependency": [
+		[
+			"cme4_1_A1",
+			"cme4_1_A2"
+		],
+		[
+			"cme4_1_A2",
+			"cme4_1_A3"
+		],
+		[
+			"cme4_2_A1",
+			"cme4_2_A2"
+		],
+		[
+			"cme4_2_A2",
+			"cme4_2_A3"
+		],
+		[
+			"cme4_Z1",
+			"cme4_1_A1"
+		],
+		[
+			"cme4_Z1",
+			"cme4_2_A1"
+		]
+	]
+}
