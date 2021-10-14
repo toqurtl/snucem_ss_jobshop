@@ -49,7 +49,8 @@ class Task(object):
         for labor_info in self.type.labor_info_list:            
             new_alt_id = self.id + "_alt" + str(labor_info[Params.ALT_ID.value])
             alter = Alter(new_alt_id, labor_info)
-            alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])                       
+            alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])
+            alter.set_productivity(labor_info[Params.PRODUCTVITY.value])         
             duration = round(self.quantity / labor_info[Params.PRODUCTVITY.value])            
             alter.set_duration(duration)            
             self.alt_dict[new_alt_id] = alter
@@ -92,9 +93,12 @@ class Task(object):
         if len(self.space_id_list) == 1:
             return self.space_id_list[0]
         else:
-            space_id_set = ""
-            for space_id in self.space_id_list:
-                space_id_set += ","+space_id
+            space_id_set = ""            
+            for idx, space_id in enumerate(self.space_id_list):
+                if idx == len(self.space_id_list) - 1:
+                    space_id_set += space_id
+                else:
+                    space_id_set += space_id+","
             return space_id_set
     
     def duration_range(self):

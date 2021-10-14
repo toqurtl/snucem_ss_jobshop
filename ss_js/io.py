@@ -12,12 +12,34 @@ def get_section_list(dir_txt):
     section_list = []
     for row in excel_ws.iter_rows():
         if ctn > 0:
-            section = row[1].value
-            section_list.append(section)
+            module_type, zone, num_section, quantity = \
+                row[0].value, row[1].value, int(row[2].value), int(row[3].value)
+            section_list.append({
+                "section": zone,
+                "module_type": module_type,
+                "num_section": num_section,
+                "quantity": quantity
+            })
         ctn += 1
 
     return section_list
     
+def get_workpackage_list(dir_txt):
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel['space_raw']
+    ctn = 0
+    wp_list = []
+    for row in excel_ws.iter_rows():
+        if ctn > 0:
+            wp_id, wp_name = row[0].value, row[1].value
+            wp_list.append({
+                "workpackage_id": wp_id,
+                "workpacakage_name": wp_name
+            })
+        ctn += 1
+
+    return wp_list
+
 
 def get_space_list(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
@@ -208,14 +230,15 @@ def get_dependency_list(dir_txt):
 
     
     for section in section_list:
-        works_of_section = get_work_of_section(section, work_list)
+        works_of_section = get_work_of_section(section["section"], work_list)
         ctn = 0
         for row in excel_ws.iter_rows():
             if ctn > 0:
                 pre, pre_workpackage, suc, suc_workpackage = \
                     row[0].value, row[1].value, row[2].value, row[3].value
                 # 모듈과 그 안의 공종들
-                if pre_workpackage == "Z" and suc_workpackage != "Z":                    
+                if pre_workpackage == "Z" and suc_workpackage != "Z":
+                    
                     pre_work = get_work(pre, works_of_section)[0]
                     suc_work_list = get_work(suc, works_of_section)
                     for suc_work in suc_work_list:
@@ -235,34 +258,30 @@ def get_last_tasktype(dir_txt):
     excel_ws = excel["last_tasktype_raw"]
     return excel_ws.cell(column=1, row=1).value
 
-labor_list = get_labor_type_list(dir_txt)
-task_type_list = get_tasktype_list(dir_txt)
-work_list = get_work_list(dir_txt)
-space_list = get_space_list(dir_txt)
-dep_list = get_dependency_list(dir_txt)
-last_tasktype_id = get_last_tasktype(dir_txt)
-data = {
-    "last_tasktype_id": last_tasktype_id,
-    "labor_type": labor_list,
-    "task_type": task_type_list,
-    "work": work_list,
-    "space": space_list,
-    "dependency": dep_list
-}
 
-# print(json.dumps(data, ensure_ascii=False, indent="\t"))
-
-with open('data/generated.json', 'w', encoding="utf-8") as make_file:
-    json.dump(data, make_file, ensure_ascii=False, indent="\t")
-
-# for space in space_list:
-#     print(space)
-# for work in work_list:
-#     print(work)
-# work_list = get_work_list(dir_txt)
-# tasktype_list = get_tasktype_list(dir_txt)
-# for work in work_list:
-#     tasktype_id = work["task_type_id"]    
-#     for tasktype in tasktype_list:
-#         if tasktype["task_id"] == tasktype_id:
-#             pass
+def generate_json(dir_txt, generated_dir):
+    labor_list = get_labor_type_list(dir_txt)
+    print("generate labor_list")
+    task_type_list = get_tasktype_list(dir_txt)
+    print("generate task_type_list")
+    work_list = get_work_list(dir_txt)
+    print("generate work_list")
+    space_list = get_space_list(dir_txt)
+    print("generate dep_list")
+    dep_list = get_dependency_list(dir_txt)
+    last_tasktype_id = get_last_tasktype(dir_txt)
+    data = {
+        "section": get_section_list(dir_txt),
+        "workpackage": get_workpackage_list(dir_txt),
+        "last_tasktype_id": last_tasktype_id,
+        "labor_type": labor_list,
+        "task_type": task_type_list,
+        "work": work_list,
+        "space": space_list,
+        "dependency": dep_list
+    }
+    with open(generated_dir, 'w', encoding="utf-8") as make_file:
+        json.dump(data, make_file, ensure_ascii=False, indent="\t")
+    print("json_file is generated at" + generated_dir)
+    return
+    

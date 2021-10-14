@@ -37,6 +37,8 @@ class ComponentParams(Enum):
     SPACE = "space"
     DEPENDENCY = "dependency"  
     LAST_TASKTYPE = "last_tasktype_id" 
+    SECTION = "section"
+    WORKPACKAGE = "workpackage"
 
 
 class ModelParams(Enum):

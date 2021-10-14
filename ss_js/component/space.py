@@ -1,4 +1,5 @@
-from ss_js.parameters import Params, ModelParams
+from ss_js.parameters import Params
+
 
 class Space(object):
     def __init__(self, space_data):

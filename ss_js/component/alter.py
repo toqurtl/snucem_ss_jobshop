@@ -7,7 +7,8 @@ class Alter(object):
         self.id = alt_id        
         self.info = {
             Params.REQUIRED_LABOR: None, # labor_type_id, num
-            Params.DURATION: None
+            Params.DURATION: None,
+            Params.PRODUCTVITY: None
         }  
         self.vars = {
             ModelParams.ALT_PRESENCE: None,
@@ -28,6 +29,9 @@ class Alter(object):
     def set_duration(self, duration):
         self.info[Params.DURATION] = duration
         return
+    
+    def set_productivity(self, productivity):
+        self.info[Params.PRODUCTVITY] = productivity
 
     def set_var(self, model: cp_model.CpModel, horizon):
         self.vars[ModelParams.ALT_PRESENCE] = model.NewBoolVar('presence_'+self.id)

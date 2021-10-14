@@ -1,6 +1,5 @@
-from ss_js.parameters import Params, ModelParams
+from ss_js.parameters import Params
 from ortools.sat.python import cp_model
-from typing import List
 
 
 class LaborType(object):    

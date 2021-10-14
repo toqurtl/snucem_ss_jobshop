@@ -1,7 +1,5 @@
 from ss_js.component.task import Task, TaskType
 from ss_js.component.labor import Labor, LaborType
-from ss_js.component.zone import Zone
-from ss_js.component.space import Space
 from ss_js.parameters import ComponentParams, Params
 
 # Input 데이터를 받기 위한 class
@@ -14,6 +12,8 @@ class Environment(object):
         self.work_dict = {}
         self.task_dict = {}
         self.labor_dict = {} # (labor)
+        self.section_list = []
+        self.workpackage_list = []
         self.dep_list = []
         self.last_tasktype_id = ""
         
@@ -31,6 +31,8 @@ class Environment(object):
         self._generate_labor_dict()
         # self._generate_task_pool()
         self._generate_dependency_list(data)
+        self.section_list = data.get(ComponentParams.SECTION.value)
+        self.workpackage_list = data.get(ComponentParams.WORKPACKAGE.value)
         self.last_tasktype_id = data.get(ComponentParams.LAST_TASKTYPE.value)
         
         return
@@ -66,10 +68,10 @@ class Environment(object):
         return 
     
     def _generate_space_dict(self, data):
-        space_list = data.get(ComponentParams.SPACE.value)
-        for space_info in space_list:
-            space = Space(space_info)
-            self.space_dict[space.id] = space
+        # space_list = data.get(ComponentParams.SPACE.value)
+        # for space_info in space_list:
+        #     space = Space(space_info)
+        #     self.space_dict[space.id] = space
         return
     
     def _generate_labor_dict(self):        
