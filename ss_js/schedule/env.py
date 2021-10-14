@@ -29,7 +29,7 @@ class Environment(object):
         self._generate_space_dict(data)                
         self._generate_work_dict(data)
         self._generate_labor_dict()
-        self._generate_task_pool()
+        # self._generate_task_pool()
         self._generate_dependency_list(data)
         self.last_tasktype_id = data.get(ComponentParams.LAST_TASKTYPE.value)
         
@@ -98,4 +98,3 @@ class Environment(object):
         for task in self.task_dict.values():            
             horizon += task.max_duration
         return horizon
-        

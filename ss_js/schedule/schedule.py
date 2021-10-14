@@ -1,4 +1,4 @@
-from ss_js.env.env import Environment
+from ss_js.env.schedule.env import Environment
 from ss_js.env.component.labor import LaborType
 from ss_js.env.component.task import Task
 from ss_js.env.component.zone import Zone
@@ -32,8 +32,6 @@ class Schedule(cp_model.CpModel):
         super().__init__()
         self.env = Environment(data)        
         self.alter_dict = {}
-        
-
         # Global storage of variables for js problem
         self.start_var_dict = {}        
         self.alter_presence_vars = {}     
@@ -57,7 +55,7 @@ class Schedule(cp_model.CpModel):
         
         # set objective
         self.set_makespan_objective()
-        return        
+        return
 
     # ==============================이 밑에는 상세내용들 ==========================
 

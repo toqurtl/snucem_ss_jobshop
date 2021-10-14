@@ -9,6 +9,8 @@ class TaskType(object):
         self.id = task_data.get(Params.TASK_ID.value)
         self.name = task_data.get(Params.TASK_NAME.value)        
         self.labor_info_list = task_data.get(Params.LABOR_SET.value)
+        self.workpackage_id = task_data.get(Params.WORKPACKAGE_ID.value)
+        self.workpackage_name = task_data.get(Params.WORKPACKAGE_NAME.value)        
 
     def __str__(self):
         return self.id+"_"+self.name
@@ -29,7 +31,8 @@ class Task(object):
     def __init__(self, work_info, task_type: TaskType):            
         self.id = work_info.get(Params.WORK_ID.value)
         self.quantity = work_info.get(Params.QUANTITY.value)
-        # self.id = zone.id +"_"+task_type.id
+        self.section = work_info.get(Params.SECTION.value)        
+        self.space_id_list = work_info.get(Params.SPACE_ID.value)
         self.type: TaskType = task_type
         self.vars = {            
             ModelParams.START: None,
@@ -37,7 +40,7 @@ class Task(object):
             ModelParams.END: None,
             ModelParams.INTERVAL: None,            
         }
-        self.space_id_list = work_info.get(Params.SPACE_ID.value)
+        
         self.alt_dict = {} # alt_id, alt        
         self._set_alt_dict()
 
@@ -75,6 +78,24 @@ class Task(object):
     @property
     def type_name(self):
         return self.type.name
+    
+    @property
+    def workpackage_id(self):
+        return self.type.workpackage_id
+    
+    @property
+    def workpackage_name(self):
+        return self.workpackage_name
+
+    @property
+    def space_id(self):
+        if len(self.space_id_list) == 1:
+            return self.space_id_list[0]
+        else:
+            space_id_set = ""
+            for space_id in self.space_id_list:
+                space_id_set += ","+space_id
+            return space_id_set
     
     def duration_range(self):
         # TODO - 수정 필요        
