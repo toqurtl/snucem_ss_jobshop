@@ -17,7 +17,7 @@ generated_path = "data/generated.json"
 io.generate_json(file_path, generated_path)
 
 ```
-### example of json
+### json파일 형태
 ```json
 {	
 	"last_tasktype_id": "A3", 
@@ -58,7 +58,17 @@ io.generate_json(file_path, generated_path)
 		},
 ```
 
-## Variable 세팅 관련
+## 모델 생성
 ### Structure
 
 ### 변수명 규칙
+
+## 최적화
+
+
+## 결과확인
+### task_list
+
+### 시간별 task
+
+### 시간별 labor

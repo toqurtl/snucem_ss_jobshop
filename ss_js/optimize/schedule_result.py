@@ -1,4 +1,4 @@
-from ss_js.parameters import Params
+from ss_js.parameters import Params, ResultParams
 import json
 
 
@@ -22,16 +22,16 @@ class ScheduleResult(object):
 
             for labor_type, num_labor in selected_alter.info[Params.REQUIRED_LABOR].items():
                 pass
-                
-            data['task_id'] = task.id
-            data['section'] = task.section
-            data['start_value'] = start_value
-            data['end_value'] = end_value
-            data['duration'] = selected_alter.info[Params.DURATION]
-            data['num_labor'] = num_labor
-            data['labor_type'] = labor_type
-            data['productivity'] = selected_alter.info[Params.PRODUCTVITY]
-            data['workpackage_id'] = task.workpackage_id           
+            
+            data[ResultParams.TASK_ID.value] = task.id
+            data[ResultParams.SECTION.value] = task.section
+            data[ResultParams.START_VALUE.value] = start_value
+            data[ResultParams.END_VALUE.value] = end_value
+            data[ResultParams.DURATION.value] = selected_alter.info[Params.DURATION]
+            data[ResultParams.NUM_LABOR.value] = num_labor
+            data[ResultParams.LABOR_TYPE.value] = labor_type
+            data[ResultParams.PRODUCTIVITY.value] = selected_alter.info[Params.PRODUCTVITY]
+            data[ResultParams.WORKPACKAGE_ID.value] = task.workpackage_id           
             self.task_result_data.append(data)
 
         return
@@ -52,8 +52,8 @@ class ScheduleResult(object):
                 start_value, end_value = callback.Value(task.start_var), callback.Value(task.end_var)
                 if start_value <= time < end_value:
                     self.task_dict[time][task.id] = {
-                        "space_id": task.space_id_list,
-                        "section": task.section
+                        ResultParams.SPACE_ID.value: task.space_id_list,
+                        ResultParams.SECTION.value: task.section
                     }
                     self.put_num_labor_dict_of_alter_at_time(time, alter)
         return
@@ -67,10 +67,10 @@ class ScheduleResult(object):
         return
 
     def save(self, file_path):
-        with open(file_path+"_tasklist.json", 'w', encoding="utf-8") as make_file:
+        with open(file_path+"_tasktime.json", 'w', encoding="utf-8") as make_file:
             json.dump(self.task_dict, make_file, ensure_ascii=False, indent="\t")
         
-        with open(file_path+"_tasktime.json", 'w', encoding="utf-8") as make_file:
+        with open(file_path+"_tasklist.json", 'w', encoding="utf-8") as make_file:
             json.dump(self.task_result_data, make_file, ensure_ascii=False, indent="\t")
 
         with open(file_path+"_labortime.json", 'w', encoding="utf-8") as make_file:

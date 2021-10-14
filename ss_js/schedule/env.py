@@ -33,7 +33,7 @@ class Environment(object):
         self._generate_dependency_list(data)
         self.section_list = data.get(ComponentParams.SECTION.value)
         self.workpackage_list = data.get(ComponentParams.WORKPACKAGE.value)
-        self.last_tasktype_id = data.get(ComponentParams.LAST_TASKTYPE.value)
+        self.last_tasktype_id = data.get(ComponentParams.LAST_TASKTYPE.value)        
         
         return
 

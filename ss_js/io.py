@@ -26,7 +26,7 @@ def get_section_list(dir_txt):
     
 def get_workpackage_list(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
-    excel_ws = excel['space_raw']
+    excel_ws = excel['workpackage_raw']
     ctn = 0
     wp_list = []
     for row in excel_ws.iter_rows():

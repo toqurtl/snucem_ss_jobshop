@@ -1,4 +1,34 @@
 {
+	"section": [
+		{
+			"section": "cme4",
+			"module_type": "Main",
+			"num_section": 6,
+			"quantity": 2176
+		},
+		{
+			"section": "cep13",
+			"module_type": "lateral",
+			"num_section": 7,
+			"quantity": 578
+		},
+		{
+			"section": "cme5",
+			"module_type": "Main",
+			"num_section": 6,
+			"quantity": 1888
+		}
+	],
+	"workpackage": [
+		{
+			"workpackage_id": "Z",
+			"workpacakage_name": "모듈설치"
+		},
+		{
+			"workpackage_id": "A",
+			"workpacakage_name": "S-gas"
+		}
+	],
 	"last_tasktype_id": "A3",
 	"labor_type": [
 		{

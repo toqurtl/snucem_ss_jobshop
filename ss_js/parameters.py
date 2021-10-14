@@ -50,4 +50,16 @@ class ModelParams(Enum):
     ALT_PRESENCE = 'alt_presence'
     SPACE_PRESENCE = 'space_presence'
     
+
+class ResultParams(Enum):
+    TASK_ID = "task_id"
+    SECTION = "section"
+    START_VALUE = "start_value"
+    END_VALUE = "end_value"
+    DURATION = "duration"
+    NUM_LABOR = "num_labor"
+    LABOR_TYPE = "labor_type"
+    PRODUCTIVITY = "productivity"
+    WORKPACKAGE_ID = "workpackage_id"
+    SPACE_ID = "space_id"
     
