@@ -3,7 +3,7 @@ from ortools.sat.python import cp_model
 import openpyxl
 import json
 
-dir_txt = "data/input2.xlsx"
+dir_txt = "data/input.xlsx"
 # read_space_raw
 def get_section_list(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
@@ -230,12 +230,19 @@ def get_dependency_list(dir_txt):
     return dep_list
 
 
+def get_last_tasktype(dir_txt):
+    excel = openpyxl.load_workbook(dir_txt)
+    excel_ws = excel["last_tasktype_raw"]
+    return excel_ws.cell(column=1, row=1).value
+
 labor_list = get_labor_type_list(dir_txt)
 task_type_list = get_tasktype_list(dir_txt)
 work_list = get_work_list(dir_txt)
 space_list = get_space_list(dir_txt)
 dep_list = get_dependency_list(dir_txt)
+last_tasktype_id = get_last_tasktype(dir_txt)
 data = {
+    "last_tasktype_id": last_tasktype_id,
     "labor_type": labor_list,
     "task_type": task_type_list,
     "work": work_list,
@@ -245,7 +252,7 @@ data = {
 
 # print(json.dumps(data, ensure_ascii=False, indent="\t"))
 
-with open('data/generated2.json', 'w', encoding="utf-8") as make_file:
+with open('data/generated.json', 'w', encoding="utf-8") as make_file:
     json.dump(data, make_file, ensure_ascii=False, indent="\t")
 
 # for space in space_list:

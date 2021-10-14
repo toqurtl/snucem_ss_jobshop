@@ -1,4 +1,5 @@
-{
+{   
+    "last_tasktype_id": "A3",    
     "labor_type":[
         {
             "labor_id": "l1",
@@ -18,7 +19,7 @@
     ],
     "task_type":[
         {
-            "task_id": "A1",            
+            "task_id": "Z1",            
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -30,7 +31,7 @@
                 ]    
         },
         {
-            "task_id": "B1",            
+            "task_id": "A1",            
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -48,7 +49,7 @@
                 ]    
         },
         {
-            "task_id": "B2",            
+            "task_id": "A2",            
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -61,7 +62,7 @@
             ]            
         },
         {
-            "task_id": "B3",            
+            "task_id": "A3",            
             "labor_set":[
                     {
                         "alt_id": 0,
@@ -112,55 +113,55 @@
     ],
     "work":[
         {
-            "work_id": "m_cme4_A1",
-            "task_type_id": "A1",
+            "work_id": "m_cme4_Z1",
+            "task_type_id": "Z1",
             "space_id": ["m_cme4_1", "m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_1_B1",
-            "task_type_id": "B1",
+            "work_id": "m_cme4_1_A1",
+            "task_type_id": "A1",
             "space_id": ["m_cme4_1"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_1_B2",
-            "task_type_id": "B2",
+            "work_id": "m_cme4_1_A2",
+            "task_type_id": "A2",
             "space_id": ["m_cme4_1"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_1_B3",
-            "task_type_id": "B3",
+            "work_id": "m_cme4_1_A3",
+            "task_type_id": "A3",
             "space_id": ["m_cme4_1"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_2_B1",
-            "task_type_id": "B1",
+            "work_id": "m_cme4_2_A1",
+            "task_type_id": "A1",
             "space_id": ["m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_2_B2",
-            "task_type_id": "B2",
+            "work_id": "m_cme4_2_A2",
+            "task_type_id": "A2",
             "space_id": ["m_cme4_2"],
             "quantity": 5
         },
         {
-            "work_id": "m_cme4_2_B3",
-            "task_type_id": "B3",
+            "work_id": "m_cme4_2_A3",
+            "task_type_id": "A3",
             "space_id": ["m_cme4_2"],
             "quantity": 5
         }
     ],
     "dependency":[
-        ["m_cme4_A1", "m_cme4_1_B1"],
-        ["m_cme4_A1", "m_cme4_2_B1"],        
-        ["m_cme4_1_B1", "m_cme4_1_B2"],
-        ["m_cme4_1_B2", "m_cme4_1_B3"],
-        ["m_cme4_2_B1", "m_cme4_2_B2"],
-        ["m_cme4_2_B2", "m_cme4_2_B3"]
+        ["m_cme4_Z1", "m_cme4_1_A1"],
+        ["m_cme4_Z1", "m_cme4_2_A1"],        
+        ["m_cme4_1_A1", "m_cme4_1_A2"],
+        ["m_cme4_1_A2", "m_cme4_1_A3"],
+        ["m_cme4_2_A1", "m_cme4_2_A2"],
+        ["m_cme4_2_A2", "m_cme4_2_A3"]
     ]
 
 }

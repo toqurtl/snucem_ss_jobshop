@@ -47,7 +47,6 @@ class Schedule(cp_model.CpModel):
         self.set_vars_of_alter()
         self.set_alter_dict()
         self.set_alter_presence_vars()
-        # self.set_zone_ends()
         self.allocate_interval_vars_to_labor()        
         # set constraints
         self.set_dependency_constraints()
@@ -129,10 +128,6 @@ class Schedule(cp_model.CpModel):
         for task in self.task_dict.values():
             for alt in task.alt_dict.values():
                 alt.set_var(self, self.horizon)
-        # for zone in self.zone_dict.values():
-        #     for task in zone.task_list:
-        #         for alt in task.alt_dict.values():
-        #             alt.set_var(self, self.horizon)
         return
 
     # alter 세팅
@@ -159,30 +154,20 @@ class Schedule(cp_model.CpModel):
     def task_of_max_equality(self):
         task_list = []
         for task in self.task_dict.values():
-            if task.type.id == "B3":
+            if task.type.id == self.env.last_tasktype_id:
                 task_list.append(task.end_var)
         return task_list
-    # deprecated
-    def set_zone_ends(self):
-        for zone in self.zone_dict.values():
-            # last_task = zone.task_list[-1]
-            for last_task in zone.last_task_list:       
-                self.zone_ends.append(last_task.end_var)
-        return
+
 
     # 각 labor의 관련된 alt_interval들을 각 labor에 담아둠, set_labor_constraints와 관련된 것인데 향후 삭제할듯        
     def allocate_interval_vars_to_labor(self):
         for task in self.task_dict.values():
             for alter in task.alt_dict.values():            
-                for labor_type_id in alter.labor_type_id_list():
-                    # labor_list = self.labor_list_of_type(labor_type_id)                
+                for labor_type_id in alter.labor_type_id_list():              
                     labor_type = self.labor_type_dict[labor_type_id]
                     labor_type.add_interval_var(alter.interval_var)
                     labor_type.add_demand(alter.num_labor_type(labor_type_id))                    
-                    # deprecated
-                    # for labor in labor_list:                    
-                    #     labor.add_alter(alter, self)                        
-                    #     alter.set_labor(labor)                              
+                            
         return
 
     ###################### constraints ###########################
@@ -190,12 +175,7 @@ class Schedule(cp_model.CpModel):
     ## 수정_1005
     def set_dependency_constraints(self):
         for pre_task, suc_task in self.dep_list:                      
-            self.Add(pre_task.end_var <= suc_task.start_var)
-            # previous_task = None
-            # for task in zone.task_list:
-            #     if previous_task is not None:
-            #         self.Add(previous_task.end_var <= task.start_var)
-            #     previous_task = task                
+            self.Add(pre_task.end_var <= suc_task.start_var)          
         return
     
     # constraint_2: 각 task의 alter들 중 하나만 선택되도록 하는 constraint
@@ -228,8 +208,7 @@ class Schedule(cp_model.CpModel):
 
     # ====================== 최적화 목적 설정 ==============================
     def set_makespan_objective(self):
-        makespan = self.NewIntVar(0, self.horizon, 'makespan')
-        print(self.task_of_max_equality())   
+        makespan = self.NewIntVar(0, self.horizon, 'makespan')        
         self.AddMaxEquality(makespan, self.task_of_max_equality())
         self.Minimize(makespan)
         return

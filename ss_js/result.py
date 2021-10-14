@@ -5,28 +5,64 @@ import datetime
 import plotly as py
 import plotly.figure_factory as ff
 import pandas as pd
+import threading
+from multiprocessing import Process
+import pickle
+
+def print_value(schedule, solver):
+    print('fuck')
+    for task in schedule.task_dict.values():            
+        start_value = solver.Value(task.start_var)
+        print(start_value)
+
 
 
 class SolutionPrinter(cp_model.CpSolverSolutionCallback):
     """Print intermediate solutions."""
 
-    def __init__(self):
+    def __init__(self, schedule: Schedule, result):
         cp_model.CpSolverSolutionCallback.__init__(self)
         self.__solution_count = 0
+        self.schedule = schedule
+        self.result = result
 
     def on_solution_callback(self):
         """Called at each new solution."""
         print('Solution %i, time = %f s, objective = %i' %
-              (self.__solution_count, self.WallTime(), self.ObjectiveValue()))
+              (self.__solution_count, self.WallTime(), self.ObjectiveValue()))                   
+        
+        if self.__solution_count % 10 == 1:
+            print(self.optimal_schedule())
+
+        if self.ObjectiveValue() < 1800:
+            self.StopSearch()
         self.__solution_count += 1
+    
+    def check_procedure(self):
+        dt = datetime.datetime
+        time_delta = datetime.timedelta
+        today = dt.today()
+        start_date = dt(today.year,today.month,today.day)
+        result_data = []
+        for task in self.schedule.task_dict.values():            
+            start_value = self.Value(task.start_var)                
+            end_value = self.Value(task.end_var)                
+            for alter in task.alt_dict.values():
+                if self.Value(alter.presence_var):
+                    duration = alter.duration
+                    selected = alter.id
+                    labor_info = alter.info[Params.REQUIRED_LABOR]           
+            result_data.append([task.id, selected, start_value, end_value, labor_info])
+        
+        return result_data
 
 
 class OptimalResult(object):
     def __init__(self, schedule: Schedule):
         self.solver = cp_model.CpSolver()                
         self.schedule = schedule
-        self.status = self.solver.SolveWithSolutionCallback(self.schedule, SolutionPrinter())        
-        
+        self.status = self.solver.SolveWithSolutionCallback(self.schedule, SolutionPrinter(self.schedule, self))        
+        print('ssibalnom')
         # results
         self.num_labor_dict = {} # t:{labor_type_id: num_labor}
         self.task_dict = {} # t: task_id, alter_dict
@@ -35,7 +71,7 @@ class OptimalResult(object):
 
         self.labor_dict = {} # type_id: [1,2,3,4,5]        
         self.optimal_schedule()
-        self.set_task_dict()
+        self.set_task_dict()        
         return
 
     @property # 최적화 성공 여부
@@ -72,20 +108,21 @@ class OptimalResult(object):
             ))
             
             self.result_data.append([task.id, selected, start_value, end_value, labor_info])
+        
         return
 
     def create_gantt(self, data_path):
         df = pd.DataFrame(self.figure_data)
         pyplt = py.offline.plot
-        colors = {
-            'm_cme4_1': 'rgb(255,0,0)',
-            'm_cme4_2': 'rgb(0, 255, 0)'
-        }
+        # colors = {
+        #     'cme4_1': 'rgb(255,0,0)',
+        #     'cme4_2': 'rgb(0, 255, 0)'
+        # }
         fig = ff.create_gantt(
             df,
-            colors= colors,
+            # colors= colors,
             index_col='Resource',
-            show_colorbar = True,
+            # show_colorbar = True,
             group_tasks = True
         )
         pyplt(fig, filename=data_path, auto_open=False)

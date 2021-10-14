@@ -1,4 +1,5 @@
 {
+	"last_tasktype_id": "A3",
 	"labor_type": [
 		{
 			"labor_id": "l1",
@@ -114,9 +115,8 @@
 		{
 			"work_id": "cme4_Z1",
 			"task_type_id": "Z1",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cme4",
 				"cme4_1",
 				"cme4_2",
 				"cme4_3",
@@ -131,9 +131,8 @@
 		{
 			"work_id": "cme4_Z2",
 			"task_type_id": "Z2",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cme4",
 				"cme4_1",
 				"cme4_2",
 				"cme4_3",
@@ -346,9 +345,8 @@
 		{
 			"work_id": "cep13_Z1",
 			"task_type_id": "Z1",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cep13",
 				"cep13_1",
 				"cep13_2",
 				"cep13_3",
@@ -364,9 +362,8 @@
 		{
 			"work_id": "cep13_Z2",
 			"task_type_id": "Z2",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cep13",
 				"cep13_1",
 				"cep13_2",
 				"cep13_3",
@@ -613,9 +610,8 @@
 		{
 			"work_id": "cme5_Z1",
 			"task_type_id": "Z1",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cme5",
 				"cme5_1",
 				"cme5_2",
 				"cme5_3",
@@ -630,9 +626,8 @@
 		{
 			"work_id": "cme5_Z2",
 			"task_type_id": "Z2",
-			"quantity": 1,
+			"quantity": 5,
 			"space_id": [
-				"cme5",
 				"cme5_1",
 				"cme5_2",
 				"cme5_3",
@@ -850,7 +845,7 @@
 			"section": "cme4",
 			"detail_section": 0,
 			"is_module": true,
-			"quantity": 1
+			"quantity": 5
 		},
 		{
 			"space_id": "cme4_1",
@@ -906,7 +901,7 @@
 			"section": "cep13",
 			"detail_section": 0,
 			"is_module": true,
-			"quantity": 1
+			"quantity": 5
 		},
 		{
 			"space_id": "cep13_1",
@@ -970,7 +965,7 @@
 			"section": "cme5",
 			"detail_section": 0,
 			"is_module": true,
-			"quantity": 1
+			"quantity": 5
 		},
 		{
 			"space_id": "cme5_1",

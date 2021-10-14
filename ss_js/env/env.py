@@ -15,6 +15,7 @@ class Environment(object):
         self.task_dict = {}
         self.labor_dict = {} # (labor)
         self.dep_list = []
+        self.last_tasktype_id = ""
         
         # 수정 1012
         self.space_dict = {}
@@ -25,12 +26,12 @@ class Environment(object):
     def _initialize(self, data):        
         self._generate_labor_type_dict(data)
         self._generate_task_type_dict(data)
-        self._generate_space_dict(data)        
-        # self._generate_zone_dict(data)
+        self._generate_space_dict(data)                
         self._generate_work_dict(data)
         self._generate_labor_dict()
         self._generate_task_pool()
         self._generate_dependency_list(data)
+        self.last_tasktype_id = data.get(ComponentParams.LAST_TASKTYPE.value)
         
         return
 
@@ -55,22 +56,7 @@ class Environment(object):
             task_type = TaskType(task_type_info)
             self.task_type_dict[task_type.id] = task_type            
         return
-
-    # def _generate_zone_dict(self, data):
-    #     zone_list = data.get(ComponentParams.ZONE.value)
-    #     for zone_info in zone_list:
-    #         zone = Zone(zone_info)
-    #         for space_id in zone.space_id_list:                
-    #             zone.space_list.append(self.space_dict[space_id])
-    #         # deprecated
-    #         # for last_task_type_id in zone.last_task_type_id_list:
-    #         #     last_task_type = self.task_type_dict[last_task_type_id]
-    #         #     zone.last_task_type_list.append(last_task_type)
-    #         self.zone_dict[zone.id] = zone           
-    #     # TODO - check data exception
-    #     return
     
-    # 수정 1012
     def _generate_work_dict(self, data):
         work_list = data.get(ComponentParams.WORK.value)
         for work_info in work_list:            
@@ -79,7 +65,6 @@ class Environment(object):
             self.task_dict[task.id] = task
         return 
     
-    # 수정 1012
     def _generate_space_dict(self, data):
         space_list = data.get(ComponentParams.SPACE.value)
         for space_info in space_list:
@@ -93,24 +78,6 @@ class Environment(object):
                 labor = Labor(str(i), labor_type_id, self)                
                 self.labor_dict[labor.id] = labor
         return
-
-    def _generate_task_pool(self):           
-        # for zone in self.zone_dict.values():            
-        #     # for task_type_str in zone.task_type_list:
-        #     #     task_type = self.task_type_dict[task_type_str]
-        #     #     task = Task(zone, task_type)
-        #     #     self.task_dict[task.id] = task  
-        #     #     zone.add_task(task)
-        # for zone in self.zone_dict.values():
-        #     for dep in zone.task_type_dependency:
-        #         pre_task_type, suc_task_type = self.task_type_dict[dep[0]], self.task_type_dict[dep[1]]
-        #         pre_task, suc_task = zone.task_of_type(pre_task_type), zone.task_of_type(suc_task_type)                
-        #         zone.task_dependency.append((pre_task, suc_task))
-        return
-    
-    
-
-
 
     # =========================== 데이터들을 정리해서 반환=====================================
     # labor_type_id를 input하면 labor에서 해당 labor들을 list 반환
@@ -130,9 +97,5 @@ class Environment(object):
         horizon = 0
         for task in self.task_dict.values():            
             horizon += task.max_duration
-        # for zone in self.zone_dict.values():
-        #     horizon += sum(map(lambda x: x.max_duration, zone.task_list))                   
-        # return horizon       
         return horizon
-        # fun
-        # return sum(map(lambda x: sum(map(lambda y: y.duration, x.task_list)), self.zone_dict.values()))
+        
