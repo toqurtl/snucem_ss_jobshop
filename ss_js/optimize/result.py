@@ -1,4 +1,4 @@
-from ss_js.env.schedule import Schedule
+from ss_js.schedule.schedule import Schedule
 from ortools.sat.python import cp_model
 from ss_js.parameters import Params
 import datetime

@@ -1,13 +1,10 @@
-from ss_js.env.schedule.env import Environment
-from ss_js.env.component.labor import LaborType
-from ss_js.env.component.task import Task
-from ss_js.env.component.zone import Zone
-from ss_js.env.component.space import Space
+from ss_js.schedule.env import Environment
+from ss_js.component.labor import LaborType
+from ss_js.component.task import Task
+from ss_js.component.zone import Zone
+from ss_js.component.space import Space
 from ortools.sat.python import cp_model
 from typing import Dict
-from itertools import combinations
-
-from ss_js.parameters import ModelParams
 
 # Variables와 constraint를 설정함
 # 모델의 component

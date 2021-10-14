@@ -1,7 +1,7 @@
-from ss_js.env.component.task import Task, TaskType
-from ss_js.env.component.labor import Labor, LaborType
-from ss_js.env.component.zone import Zone
-from ss_js.env.component.space import Space
+from ss_js.component.task import Task, TaskType
+from ss_js.component.labor import Labor, LaborType
+from ss_js.component.zone import Zone
+from ss_js.component.space import Space
 from ss_js.parameters import ComponentParams, Params
 
 # Input 데이터를 받기 위한 class

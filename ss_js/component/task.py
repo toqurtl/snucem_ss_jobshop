@@ -1,5 +1,5 @@
 from ss_js.parameters import Params, ModelParams
-from ss_js.env.component.alter import Alter
+from ss_js.component.alter import Alter
 from ortools.sat.python import cp_model
 from typing import List
 
