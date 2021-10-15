@@ -25,6 +25,7 @@ class ScheduleResult(object):
             
             data[ResultParams.TASK_ID.value] = task.id
             data[ResultParams.SECTION.value] = task.section
+            data[ResultParams.SPACE_ID.value] = task.space_id
             data[ResultParams.START_VALUE.value] = start_value
             data[ResultParams.END_VALUE.value] = end_value
             data[ResultParams.DURATION.value] = selected_alter.info[Params.DURATION]
