@@ -255,8 +255,12 @@ def get_dependency_list(dir_txt):
 
 def get_last_tasktype(dir_txt):
     excel = openpyxl.load_workbook(dir_txt)
-    excel_ws = excel["last_tasktype_raw"]
-    return excel_ws.cell(column=1, row=1).value
+    excel_ws = excel["last_tasktype_raw"]    
+    last_tasktype_list = []
+    for row in excel_ws.iter_rows():                           
+        last_tasktype_list.append(row[0].value)       
+
+    return last_tasktype_list
 
 
 def generate_json(dir_txt, generated_dir):
@@ -269,11 +273,11 @@ def generate_json(dir_txt, generated_dir):
     space_list = get_space_list(dir_txt)
     print("generate dep_list")
     dep_list = get_dependency_list(dir_txt)
-    last_tasktype_id = get_last_tasktype(dir_txt)
+    last_tasktype_id_list = get_last_tasktype(dir_txt)
     data = {
         "section": get_section_list(dir_txt),
         "workpackage": get_workpackage_list(dir_txt),
-        "last_tasktype_id": last_tasktype_id,
+        "last_tasktype_id": last_tasktype_id_list,
         "labor_type": labor_list,
         "task_type": task_type_list,
         "work": work_list,
@@ -282,6 +286,6 @@ def generate_json(dir_txt, generated_dir):
     }
     with open(generated_dir, 'w', encoding="utf-8") as make_file:
         json.dump(data, make_file, ensure_ascii=False, indent="\t")
-    print("json_file is generated at" + generated_dir)
+    print("json_file is generated at " + generated_dir)
     return
     

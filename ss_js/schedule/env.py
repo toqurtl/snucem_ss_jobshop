@@ -15,7 +15,7 @@ class Environment(object):
         self.section_list = []
         self.workpackage_list = []
         self.dep_list = []
-        self.last_tasktype_id = ""
+        self.last_tasktype_id = []
         
         # 수정 1012
         self.space_dict = {}

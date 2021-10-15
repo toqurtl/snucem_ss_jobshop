@@ -75,7 +75,7 @@ class Builder(object):
     def task_of_max_equality(self):
         task_list = []
         for task in self.schedule.task_dict.values():
-            if task.type.id == self.schedule.env.last_tasktype_id:
+            if task.type.id in self.schedule.env.last_tasktype_id:
                 task_list.append(task.end_var)
         return task_list
 
