@@ -66,31 +66,40 @@ def labor_time_to_excel(data_path, result_path):
     wb.close()
     return
 
-             
 
 def create_gantt(data_path, out_dir, schedule: Schedule):
     with open(data_path, 'r', encoding="utf-8") as f:
         json_data = json.load(f)
 
     figure_data = []
-    
+    workpackage_list = []
+    section_list = []
     for data in json_data:        
+        section = data['section']
+        workpackage = data['workpackage_id']
         figure_data.append(dict(
             Task=data["task_id"],
             Start=data["start_value"],
             Finish=data['end_value'],
             Workpackage=data['workpackage_id'],
             Section=data['section']
-        ))        
+        ))
+        if section not in section_list:
+            section_list.append(section)
+        if workpackage not in workpackage_list:
+            workpackage_list.append(workpackage)
+
     df = pd.DataFrame(figure_data)
     df['delta'] = df['Finish'] - df['Start']
     pyplt = py.offline.plot
     wp_colors = {}
-    for workpackage_id in schedule.workpackage_list():
+    # for workpackage_id in schedule.workpackage_list():
+    for workpackage_id in workpackage_list:
         wp_colors[workpackage_id] = utils.random_rgb_txt()
     
     sc_colors = {}
-    for section in schedule.section_list():
+    # for section in schedule.section_list():
+    for section in section_list:
         sc_colors[section] = utils.random_rgb_txt()
 
     fig = ff.create_gantt(
@@ -113,7 +122,6 @@ def create_gantt(data_path, out_dir, schedule: Schedule):
     )
     fig_3.layout.xaxis.type = 'linear'
 
-    pyplt(fig, filename=out_dir+"/workpackage_chart.html", auto_open=False)
-    pyplt(fig_2, filename=out_dir+"/test_2.html", auto_open=False)  
-    pyplt(fig_3, filename=out_dir+"/section.html", auto_open=False)  
+    pyplt(fig, filename=out_dir+"/workpackage_chart.html", auto_open=False)    
+    pyplt(fig_3, filename=out_dir+"/section_chart.html", auto_open=False)  
     return
