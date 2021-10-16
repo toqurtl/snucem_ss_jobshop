@@ -2,14 +2,62 @@ import collections
 from ortools.sat.python import cp_model
 import openpyxl
 import json
+import random
 
 
 class Converter(object):
     def __init__(self, dir_txt):
         self.dir_txt = dir_txt
-        
+        self.data = {                    
+            "section": [],
+            "workpackage": [],
+            "last_tasktype_id": [],
+            "labor_type": [],
+            "task_type": [],
+            "work": [],
+            "space": [],
+            "dependency": [],        
+        }
+        self.generate_data()
 
-    # read_space_raw
+    def get_pre_work_list(self, work_id):
+        pre_work_list = []
+        for dep in self.data["dependency"]:
+            if dep[1] == work_id:
+                pre_work_list.append(dep[0])
+        return pre_work_list
+
+    def add_interference(self, inter_info, target_tasktype_list, rate=0.3):        
+        self.data["task_type"].append(inter_info)        
+        added_work_list = []
+        added_dep_list = []
+        for work in self.data["work"]:
+            if work["task_type_id"] in target_tasktype_list:                
+                if random.random() < rate:                    
+                    inter_work = {
+                        "work_id": work["work_id"] + "_inter",
+                        "task_type_id": inter_info["task_id"],
+                        "quantity": 1,
+                        "space_id": work["space_id"],
+                        "section": work["section"],
+                        "workpackage_id": "I1",
+                        "is_module": work["is_module"]
+                    }
+                    added_work_list.append(inter_work)
+                    added_dep_list.append([inter_work["work_id"],work["work_id"]])
+                    pre_work_list = self.get_pre_work_list(work["work_id"])
+                    for pre_work in pre_work_list:
+                        added_dep_list.append([pre_work, inter_work["work_id"]])
+                    
+                    for added_work in added_work_list:
+                        self.data["work"].append(added_work)
+                    
+                    for added_dep in added_dep_list:
+                        self.data["dependency"].append(added_dep)
+
+        return
+    
+    # ======================================== 초기화=====================================
     def get_section_list(self):
         excel = openpyxl.load_workbook(self.dir_txt)
         excel_ws = excel['space_raw']
@@ -44,7 +92,6 @@ class Converter(object):
             ctn += 1
 
         return wp_list
-
 
     def get_space_list(self):
         excel = openpyxl.load_workbook(self.dir_txt)
@@ -84,7 +131,6 @@ class Converter(object):
             ctn += 1
         return space_list
 
-
     def get_alt_id_list(self, task_id_arg):
         excel = openpyxl.load_workbook(self.dir_txt)
         excel_ws = excel['alt_raw']    
@@ -105,7 +151,6 @@ class Converter(object):
                     })
         
         return alt_id_list
-
 
     def get_tasktype_list(self):
         excel = openpyxl.load_workbook(self.dir_txt)
@@ -274,20 +319,8 @@ class Converter(object):
             last_tasktype_list.append(row[0].value)       
 
         return last_tasktype_list
-
-
-    def add_rework(self):
-        pass
-
-    def add_interference(self, rate=0.3):
-        new_work_list = []
-        work_list = self.get_work_list()
-        for work in work_list:
-            pass
-
-        
-
-    def generate_json(self, generated_dir):
+    
+    def generate_data(self):
         labor_list = self.get_labor_type_list()
         print("generate labor_list")
         task_type_list = self.get_tasktype_list()
@@ -298,18 +331,19 @@ class Converter(object):
         print("generate dep_list")
         dep_list = self.get_dependency_list()
         last_tasktype_id_list = self.get_last_tasktype()
-        data = {
-            "section": self.get_section_list(),
-            "workpackage": self.get_workpackage_list(),
-            "last_tasktype_id": last_tasktype_id_list,
-            "labor_type": labor_list,
-            "task_type": task_type_list,
-            "work": work_list,
-            "space": space_list,
-            "dependency": dep_list
-        }
+
+        self.data["section"] =  self.get_section_list()
+        self.data["workpackage"] =  self.get_workpackage_list()
+        self.data["last_tasktype_id"] =  last_tasktype_id_list
+        self.data["labor_type"] =  labor_list
+        self.data["task_type"] =  task_type_list
+        self.data["work"] =  work_list
+        self.data["space"] =  space_list
+        self.data["dependency"] =  dep_list
+
+    def generate_json(self, generated_dir):                
         with open(generated_dir, 'w', encoding="utf-8") as make_file:
-            json.dump(data, make_file, ensure_ascii=False, indent="\t")
+            json.dump(self.data, make_file, ensure_ascii=False, indent="\t")
         print("json_file is generated at " + generated_dir)
         return
     
