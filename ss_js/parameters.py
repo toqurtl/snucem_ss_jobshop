@@ -25,6 +25,8 @@ class Params(Enum):
     SECTION = "section"
     WORKPACKAGE_ID = "workpackage_id"
     WORKPACKAGE_NAME = "workpackage_name"
+    IS_PRODUCTIVITY = "is_productivity"
+    FIXED_DURATION = "fixed_duration"
 
 
 class ComponentParams(Enum):

@@ -82,15 +82,17 @@ def get_alt_id_list(task_id_arg, dir_txt):
     alt_id_list = []
     for idx, row in enumerate(excel_ws.iter_rows()):
         if idx > 0:
-            task_id, alt_id, required_labor, required_number, productivity = \
-                row[0].value, row[1].value, row[2].value, row[3].value, float(row[4].value)
+            task_id, alt_id, required_labor, required_number, productivity, is_productivity, fixed_duration = \
+                row[0].value, row[1].value, row[2].value, row[3].value, float(row[4].value), bool(row[5].value), int(row[6].value)
             if task_id == task_id_arg:
                 alt_id_list.append({
                     "alt_id": alt_id,
                     "required":{
                         required_labor: required_number
                     },
-                    "productivity": productivity
+                    "productivity": productivity,
+                    "is_productivity": is_productivity,
+                    "fixed_duration": fixed_duration
                 })
     
     return alt_id_list

@@ -3,13 +3,19 @@ from ortools.sat.python import cp_model
 
 
 class Alter(object):
-    def __init__(self, alt_id, model: cp_model.CpModel):
-        self.id = alt_id        
+    def __init__(self, alt_id, labor_info, quantity):
+        self.id = alt_id
+        self.quantity = quantity     
+        # labor_type_id: {labor_id: labor}
+        self.labor_dict = {}     
         self.info = {
-            Params.REQUIRED_LABOR: None, # labor_type_id, num
+            Params.REQUIRED_LABOR: labor_info[Params.REQUIRED_LABOR.value], # labor_type_id, num
             Params.DURATION: None,
-            Params.PRODUCTVITY: None
-        }  
+            Params.PRODUCTVITY: labor_info[Params.PRODUCTVITY.value],
+            Params.IS_PRODUCTIVITY: labor_info[Params.IS_PRODUCTIVITY.value],
+            Params.FIXED_DURATION: labor_info[Params.FIXED_DURATION.value]
+        } 
+        self.setting()
         self.vars = {
             ModelParams.ALT_PRESENCE: None,
             ModelParams.START: None,
@@ -17,8 +23,18 @@ class Alter(object):
             ModelParams.END: None,
             ModelParams.INTERVAL: None
         }
-        # labor_type_id: {labor_id: labor}
-        self.labor_dict = {}
+           
+
+    def setting(self):
+        for labor_type_id in self.labor_type_id_list():
+            self.labor_dict[labor_type_id] = {}
+
+        if self.is_productivity:
+            duration = round(self.quantity/self.productivity)
+            self.info[Params.DURATION] = duration
+        else:
+            self.info[Params.DURATION] = self.fixed_duration 
+    
 
     def set_required_labor(self, required_labor_dict):
         self.info[Params.REQUIRED_LABOR] = required_labor_dict
@@ -26,12 +42,13 @@ class Alter(object):
             self.labor_dict[labor_type_id] = {}
         return
 
-    def set_duration(self, duration):
-        self.info[Params.DURATION] = duration
-        return
+    # def set_duration(self, duration):
+    #     self.info[Params.DURATION] = duration
+    #     return
     
-    def set_productivity(self, productivity):
-        self.info[Params.PRODUCTVITY] = productivity
+    
+    # def set_productivity(self, productivity):
+    #     self.info[Params.PRODUCTVITY] = productivity
 
     def set_var(self, model: cp_model.CpModel, horizon):
         self.vars[ModelParams.ALT_PRESENCE] = model.NewBoolVar('presence_'+self.id)
@@ -104,3 +121,15 @@ class Alter(object):
     @property
     def end_var(self):
         return self.vars[ModelParams.END]
+    
+    @property
+    def fixed_duration(self):
+        return self.info[Params.FIXED_DURATION]
+
+    @property
+    def is_productivity(self):
+        return self.info[Params.IS_PRODUCTIVITY]
+
+    @property
+    def productivity(self):
+        return self.info[Params.PRODUCTVITY]

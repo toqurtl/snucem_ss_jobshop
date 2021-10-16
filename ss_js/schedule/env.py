@@ -56,7 +56,7 @@ class Environment(object):
         task_type_list = data.get(ComponentParams.TASK_TYPE.value)        
         for task_type_info in task_type_list:
             task_type = TaskType(task_type_info)
-            self.task_type_dict[task_type.id] = task_type            
+            self.task_type_dict[task_type.id] = task_type
         return
     
     def _generate_work_dict(self, data):
@@ -67,6 +67,7 @@ class Environment(object):
             self.task_dict[task.id] = task
         return 
     
+    # deprecated
     def _generate_space_dict(self, data):
         # space_list = data.get(ComponentParams.SPACE.value)
         # for space_info in space_list:

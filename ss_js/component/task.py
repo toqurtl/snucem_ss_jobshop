@@ -48,11 +48,15 @@ class Task(object):
     def _set_alt_dict(self):
         for labor_info in self.type.labor_info_list:            
             new_alt_id = self.id + "_alt" + str(labor_info[Params.ALT_ID.value])
-            alter = Alter(new_alt_id, labor_info)
-            alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])
-            alter.set_productivity(labor_info[Params.PRODUCTVITY.value])         
-            duration = round(self.quantity / labor_info[Params.PRODUCTVITY.value])            
-            alter.set_duration(duration)            
+            alter = Alter(new_alt_id, labor_info, self.quantity)
+            # alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])
+            # alter.set_productivity(labor_info[Params.PRODUCTVITY.value])
+            # alter.set_            
+            # if alter.is_productivity:
+            #     duration = round(self.quantity / labor_info[Params.PRODUCTVITY.value])
+            #     alter.set_duration(duration)            
+            # else:
+            #     alter.set_duration(alter.fixed_duration)
             self.alt_dict[new_alt_id] = alter
         return
 

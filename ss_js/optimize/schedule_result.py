@@ -68,8 +68,8 @@ class ScheduleResult(object):
         return
 
     def save(self, file_path):
-        with open(file_path+"_tasktime.json", 'w', encoding="utf-8") as make_file:
-            json.dump(self.task_dict, make_file, ensure_ascii=False, indent="\t")
+        # with open(file_path+"_tasktime.json", 'w', encoding="utf-8") as make_file:
+        #     json.dump(self.task_dict, make_file, ensure_ascii=False, indent="\t")
         
         with open(file_path+"_tasklist.json", 'w', encoding="utf-8") as make_file:
             json.dump(self.task_result_data, make_file, ensure_ascii=False, indent="\t")

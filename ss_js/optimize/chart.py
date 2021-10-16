@@ -122,6 +122,6 @@ def create_gantt(data_path, out_dir, schedule: Schedule):
     )
     fig_3.layout.xaxis.type = 'linear'
 
-    pyplt(fig, filename=out_dir+"/workpackage_chart.html", auto_open=False)    
-    pyplt(fig_3, filename=out_dir+"/section_chart.html", auto_open=False)  
+    pyplt(fig, filename=out_dir+"workpackage_chart.html", auto_open=False)    
+    pyplt(fig_3, filename=out_dir+"section_chart.html", auto_open=False)  
     return
