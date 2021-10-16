@@ -11,7 +11,7 @@ import openpyxl
 def task_list_to_excel(data_path, result_path):
     with open(data_path, 'r', encoding="utf-8") as f:
         task_list_data = json.load(f)
-    col_names = ["task_id", "workpackage_id", "section", "space_id", "start_value", "end_value","duration", "labor_type", "num_labor", "productivity"]
+    col_names = ["task_id", "workpackage_id", "section", "space_id", "start_value", "end_value","duration", "labor_type", "num_labor", "productivity", "quantity"]
     wb = openpyxl.Workbook()
     wb.create_sheet('task_list')    
     task_list_sheet = wb['task_list']    
@@ -39,7 +39,7 @@ def get_labor_time_col_list(labor_data):
 def labor_time_to_excel(data_path, result_path):
     with open(data_path, 'r', encoding="utf-8") as f:
         labor_time_data = json.load(f)
-    col_names = ["task_id", "workpackage_id", "section", "space_id", "start_value", "end_value","duration", "labor_type", "num_labor", "productivity"]
+
     wb = openpyxl.Workbook()    
     wb.create_sheet('labor_time')        
     labor_time_sheet = wb['labor_time']

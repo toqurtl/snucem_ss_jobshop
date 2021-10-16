@@ -32,7 +32,8 @@ class ScheduleResult(object):
             data[ResultParams.NUM_LABOR.value] = num_labor
             data[ResultParams.LABOR_TYPE.value] = labor_type
             data[ResultParams.PRODUCTIVITY.value] = selected_alter.info[Params.PRODUCTVITY]
-            data[ResultParams.WORKPACKAGE_ID.value] = task.workpackage_id           
+            data[ResultParams.WORKPACKAGE_ID.value] = task.workpackage_id
+            data[ResultParams.QUANTITY.value] = task.quantity
             self.task_result_data.append(data)
 
         return

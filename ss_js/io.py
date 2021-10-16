@@ -271,6 +271,13 @@ def get_last_tasktype(dir_txt):
     return last_tasktype_list
 
 
+def add_rework():
+    pass
+
+def add_interference(dir_txt, rate=0.3):
+    work_list = get_work_list(dir_txt)
+    
+
 def generate_json(dir_txt, generated_dir):
     labor_list = get_labor_type_list(dir_txt)
     print("generate labor_list")

@@ -68,4 +68,5 @@ class ResultParams(Enum):
     PRODUCTIVITY = "productivity"
     WORKPACKAGE_ID = "workpackage_id"
     SPACE_ID = "space_id"
+    QUANTITY = "quantity"
     

@@ -18,8 +18,9 @@
 # constraint_5) A labor can't be assigned to multiple tasks at the same time -> addNoOverLap
 
 class Builder(object):
-    def __init__(self, schedule):
+    def __init__(self, schedule, space_constraint=True):
         self.schedule = schedule
+        self.space_constraint = space_constraint
 
     def set_var_and_constraints(self):
         # set variables
@@ -33,7 +34,8 @@ class Builder(object):
         self.set_alter_constraints()
         self.set_interval_to_alter()
         self.set_cumulative()
-        self.set_space_constraints()
+        if self.space_constraint:            
+            self.set_space_constraints()
         
         # set objective
         self.set_makespan_objective()
