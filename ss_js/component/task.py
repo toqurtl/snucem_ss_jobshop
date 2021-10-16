@@ -10,7 +10,7 @@ class TaskType(object):
         self.name = task_data.get(Params.TASK_NAME.value)        
         self.labor_info_list = task_data.get(Params.LABOR_SET.value)
         self.workpackage_id = task_data.get(Params.WORKPACKAGE_ID.value)
-        self.workpackage_name = task_data.get(Params.WORKPACKAGE_NAME.value)        
+        self.workpackage_name = task_data.get(Params.WORKPACKAGE_NAME.value)                
 
     def __str__(self):
         return self.id+"_"+self.name
@@ -33,6 +33,9 @@ class Task(object):
         self.quantity = work_info.get(Params.QUANTITY.value)
         self.section = work_info.get(Params.SECTION.value)        
         self.space_id_list = work_info.get(Params.SPACE_ID.value)
+        self.fixed_start = work_info.get(Params.FIXED_START.value)
+        self.fixed_finish = work_info.get(Params.FIXED_FINISH.value)
+        self.is_module = work_info.get(Params.IS_MODULE.value)
         self.type: TaskType = task_type
         self.vars = {            
             ModelParams.START: None,
@@ -48,15 +51,7 @@ class Task(object):
     def _set_alt_dict(self):
         for labor_info in self.type.labor_info_list:            
             new_alt_id = self.id + "_alt" + str(labor_info[Params.ALT_ID.value])
-            alter = Alter(new_alt_id, labor_info, self.quantity)
-            # alter.set_required_labor(labor_info[Params.REQUIRED_LABOR.value])
-            # alter.set_productivity(labor_info[Params.PRODUCTVITY.value])
-            # alter.set_            
-            # if alter.is_productivity:
-            #     duration = round(self.quantity / labor_info[Params.PRODUCTVITY.value])
-            #     alter.set_duration(duration)            
-            # else:
-            #     alter.set_duration(alter.fixed_duration)
+            alter = Alter(new_alt_id, labor_info, self)            
             self.alt_dict[new_alt_id] = alter
         return
 
@@ -162,9 +157,15 @@ class Task(object):
     # task의 interval var을 세팅함(interval_var는 start-duration-end로 구성)
     def set_var(self, model: cp_model.CpModel, horizon):                
         min_du, max_du = self.min_duration, self.max_duration
-        self.vars[ModelParams.START] = model.NewIntVar(0, horizon, self._suffix(ModelParams.START))        
-        self.vars[ModelParams.DURATION] = model.NewIntVar(min_du, max_du, self._suffix(ModelParams.DURATION))        
-        self.vars[ModelParams.END] = model.NewIntVar(0, horizon, self._suffix(ModelParams.END))
+        if self.is_module:
+            self.vars[ModelParams.START] = self.fixed_start
+            self.vars[ModelParams.END] = self.fixed_finish
+            self.vars[ModelParams.DURATION] = self.fixed_finish - self.fixed_start
+        else:
+            self.vars[ModelParams.START] = model.NewIntVar(0, horizon, self._suffix(ModelParams.START))        
+            self.vars[ModelParams.END] = model.NewIntVar(0, horizon, self._suffix(ModelParams.END))
+            self.vars[ModelParams.DURATION] = model.NewIntVar(min_du, max_du, self._suffix(ModelParams.DURATION))        
+        
         self.vars[ModelParams.INTERVAL] = model.NewIntervalVar(
             self.vars[ModelParams.START],
             self.vars[ModelParams.DURATION],

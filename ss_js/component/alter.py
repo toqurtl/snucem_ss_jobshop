@@ -3,11 +3,15 @@ from ortools.sat.python import cp_model
 
 
 class Alter(object):
-    def __init__(self, alt_id, labor_info, quantity):
+    def __init__(self, alt_id, labor_info, task):
         self.id = alt_id
-        self.quantity = quantity     
+        self.quantity = task.quantity     
         # labor_type_id: {labor_id: labor}
-        self.labor_dict = {}     
+        self.labor_dict = {}
+        # fixed duration 설정을 위함
+        self.is_module = task.is_module
+        self.fixed_start = task.fixed_start
+        self.fixed_finish = task.fixed_finish
         self.info = {
             Params.REQUIRED_LABOR: labor_info[Params.REQUIRED_LABOR.value], # labor_type_id, num
             Params.DURATION: None,
@@ -29,11 +33,16 @@ class Alter(object):
         for labor_type_id in self.labor_type_id_list():
             self.labor_dict[labor_type_id] = {}
 
+        if self.is_module:
+            self.info[Params.DURATION] = self.fixed_finish - self.fixed_start
+            return
+
         if self.is_productivity:
             duration = round(self.quantity/self.productivity)
             self.info[Params.DURATION] = duration
         else:
             self.info[Params.DURATION] = self.fixed_duration 
+        return
     
 
     def set_required_labor(self, required_labor_dict):
@@ -52,17 +61,22 @@ class Alter(object):
 
     def set_var(self, model: cp_model.CpModel, horizon):
         self.vars[ModelParams.ALT_PRESENCE] = model.NewBoolVar('presence_'+self.id)
-        self.vars[ModelParams.START] = model.NewIntVar(0, horizon, "start_" + self.id)        
-        self.vars[ModelParams.DURATION] = self.info[Params.DURATION]
-        self.vars[ModelParams.END] = model.NewIntVar(0, horizon, 'end'+self.id)
+        if self.is_module:
+            self.vars[ModelParams.START] = self.fixed_start
+            self.vars[ModelParams.END] = self.fixed_finish
+            self.vars[ModelParams.DURATION] = self.fixed_finish - self.fixed_start
+        else:
+            self.vars[ModelParams.START] = model.NewIntVar(0, horizon, "start_" + self.id)        
+            self.vars[ModelParams.DURATION] = self.info[Params.DURATION]
+            self.vars[ModelParams.END] = model.NewIntVar(0, horizon, 'end'+self.id)
+        
         self.vars[ModelParams.INTERVAL] = model.NewOptionalIntervalVar(
             self.vars[ModelParams.START], 
             self.vars[ModelParams.DURATION], 
             self.vars[ModelParams.END], 
             self.vars[ModelParams.ALT_PRESENCE], 
             'interval_'+self.id,
-        )        
-        
+        )
         return
     
     def set_labor(self, labor):

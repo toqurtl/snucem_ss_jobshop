@@ -48,8 +48,8 @@ def get_space_list(dir_txt):
     space_list = []
     for row in excel_ws.iter_rows():
         if ctn > 0:
-            module_type, zone, num_section, quantity = \
-                row[0].value, row[1].value, int(row[2].value), int(row[3].value)
+            module_type, zone, num_section, quantity, fixed_start, fixed_finish = \
+                row[0].value, row[1].value, int(row[2].value), int(row[3].value), int(row[4].value), int(row[5].value)
             
             space_list.append(
                 {
@@ -58,7 +58,9 @@ def get_space_list(dir_txt):
                     "section": zone,
                     "detail_section": 0,
                     "is_module": True,
-                    "quantity": 5
+                    "quantity": 5,
+                    "fixed_start": fixed_start,
+                    "fixed_finish": fixed_finish
                 }
             )
             for idx in range(1, num_section + 1):
@@ -69,7 +71,9 @@ def get_space_list(dir_txt):
                         "section": zone,
                         "detail_section": idx,
                         "is_module": False,
-                        "quantity": round(quantity / num_section)
+                        "quantity": round(quantity / num_section),
+                        "fixed_start": 0,
+                        "fixed_finish": 0
                     }
                 )
         ctn += 1
@@ -166,7 +170,9 @@ def get_work_list(dir_txt):
                         "space_id": get_low_space_list(space_id, space_list),
                         "section": space["section"],
                         "workpackage_id": tasktype["workpackage_id"],
-                        "is_module": tasktype["is_module"]
+                        "is_module": tasktype["is_module"],
+                        "fixed_start": space["fixed_start"],
+                        "fixed_finish": space["fixed_finish"]
                     })
                     
             else:

@@ -27,6 +27,9 @@ class Params(Enum):
     WORKPACKAGE_NAME = "workpackage_name"
     IS_PRODUCTIVITY = "is_productivity"
     FIXED_DURATION = "fixed_duration"
+    FIXED_START = "fixed_start"
+    FIXED_FINISH = "fixed_finish"
+    IS_MODULE = "is_module"
 
 
 class ComponentParams(Enum):
@@ -41,6 +44,7 @@ class ComponentParams(Enum):
     LAST_TASKTYPE = "last_tasktype_id" 
     SECTION = "section"
     WORKPACKAGE = "workpackage"
+    
 
 
 class ModelParams(Enum):
