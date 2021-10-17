@@ -18,8 +18,13 @@ else:
 
 save_dir = "experiment/"+folder_name
 save_file_name = ""
+num_excel=0
 for file_name in os.listdir(save_dir+"/input"):    
     if file_name.split(".")[1] == "xlsx":
+        num_excel += 1
+        if num_excel > 1:
+            print('엑셀파일은 하나여야 함')
+            exit()
         save_file_name = file_name
 
 file_path = save_dir+"/input/"+save_file_name
