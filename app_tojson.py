@@ -6,7 +6,7 @@ from ss_js import io
 from ss_js.data.converter import Converter
 from ss_js.optimize import chart
 import sys
-
+import os
 
 folder_name = sys.argv[1]
 if len(sys.argv) == 3:
@@ -17,9 +17,18 @@ else:
 
 
 save_dir = "experiment/"+folder_name
-file_path = save_dir+"/input/input.xlsx"
+save_file_name = ""
+for file_name in os.listdir(save_dir+"/input"):    
+    if file_name.split(".")[1] == "xlsx":
+        save_file_name = file_name
+
+file_path = save_dir+"/input/"+save_file_name
 generated_path = save_dir+"/input/input.json"
 
+# file_path = save_dir+"/input/input_whole.xlsx"
+generated_path = save_dir+"/input/input.json"
+
+print(file_path)
 cvt = Converter(file_path)
 if interference:
     target_tasktype_list = ["A3", "A4", "A5"]

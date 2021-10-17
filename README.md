@@ -87,7 +87,7 @@ python app_tojson.py env_1 true
 app_marketresult.py [folder_name] [monitoring cycle] [target_obj]
 * 예
 ```bash
-python app_marketresult.py env_1 1 1000
+python app_optimization.py env_1 1 1000
 ```
 ### 최적화
 
