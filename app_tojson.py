@@ -19,7 +19,8 @@ else:
 save_dir = "experiment/"+folder_name
 save_file_name = ""
 num_excel=0
-for file_name in os.listdir(save_dir+"/input"):    
+for file_name in os.listdir(save_dir+"/input"):
+    experiiment_name=file_name.split(".")[0]
     if file_name.split(".")[1] == "xlsx":
         num_excel += 1
         if num_excel > 1:

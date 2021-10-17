@@ -12,5 +12,6 @@ testground.py
 makeresult.py
 ss_js_test
 experiment/
+experiment_2/
 my_data/
 *.html
