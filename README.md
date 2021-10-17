@@ -6,6 +6,12 @@
 
 # Usage
 ## 분석환경
+
+* 환경 생성
+```
+python app_env.py create test
+```
+
 experiment 폴더 내 폴더 하나 = 분석환경
 * 폴더 구조
 ```bash
