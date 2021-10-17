@@ -9,7 +9,8 @@
 experiment 폴더 내 폴더 하나 = 분석환경
 * 폴더 구조
 ```bash
-experiment[최상위폴더]
+experiment(최상위폴더)
+├── ss_js(패키지)
 ├── env1
 │   ├── input
 │	│	├── input.xlsx
@@ -20,7 +21,9 @@ experiment[최상위폴더]
 │   ├── output
 │   ├── result
 │   
-└── run.sh
+├── app_tojson.py
+├── app_optimization.py
+└── app_makeresult.py
 ``` 
 * env1 실행 후
 
