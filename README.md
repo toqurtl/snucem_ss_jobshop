@@ -6,17 +6,34 @@
 
 
 # Usage
+## 분석환경
+experiment 폴더 내 폴더 하나 = 분석환경
+* 폴더 구조
+```bash
+experiment[최상위폴더]
+├── env1
+│   ├── input
+│	│	├── input.xlsx
+│   ├── output
+│   └── result
+├── env2
+│   ├── input
+│   ├── output
+│   ├── result
+│   
+└── run.sh
+``` 
+* env1 실행 후
+
+
 ## 분석파일 생성
-### Excel to json
-```python
-from ss_js import io
-
-file_path = "data/input.xlsx"
-generated_path = "data/generated.json"
-
-io.generate_json(file_path, generated_path)
-
+python app_tojson.py [folder_name] [interference]
+* 예
+```bash
+python app_tojson.py env_1 true
 ```
+* true를 입력할 때만 간섭 고려, 다른 값을 입력하거나 입력하지 않으면 간섭 고려 X
+
 ### json파일 형태
 ```json
 {	
@@ -59,16 +76,28 @@ io.generate_json(file_path, generated_path)
 ```
 
 ## 모델 생성
-### Structure
+app_marketresult.py [folder_name] [monitoring cycle] [target_obj]
+* 예
+```bash
+python app_marketresult.py env_1 1 1000
+```
+### 최적화
 
-### 변수명 규칙
-
-## 최적화
+### 결과
 
 
-## 결과확인
-### task_list
+## 결과시각화
+python app_makeresult.py [folder_name] [solution_ctn]
+* 예
+```bash
+python app_makeresult.py env_1 3
+```
+### 간트차트
+* 분단위
 
-### 시간별 task
+* 일단위
 
-### 시간별 labor
+### 시간별 labor 투입량
+* 분단위
+
+* 일단위
