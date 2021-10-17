@@ -1,7 +1,6 @@
 # snucem_ss_jobshop
-* data: 샘플 데이터
-* practice: ortool 예제
 * sample: ss_js 사용 예시
+* sample_data: ss_js 위한 샘플 데이터
 * ss_js: 패키지
 
 
