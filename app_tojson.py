@@ -8,9 +8,12 @@ from ss_js.optimize import chart
 import sys
 import os
 
+inter_duration = 100
 folder_name = sys.argv[1]
 if len(sys.argv) == 3:
     interference = sys.argv[2] == "true"
+elif len(sys.argv) == 4:
+    inter_duration = int(sys.argv[3]) 
 else:
     interference = False
 
@@ -53,7 +56,7 @@ if interference:
                 },
                 "productivity": 0.03,
                 "is_productivity": False,
-                "fixed_duration": 100
+                "fixed_duration": inter_duration
             }
         ]
     }

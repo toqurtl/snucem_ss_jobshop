@@ -9,27 +9,33 @@
 
 * 환경 생성
 ```
-python app_env.py create test
+python app_env.py create test 5 3
 ```
+* test: 환경 명
+### TODO - 일반화(cfg 파일 필요)
+* 5: l1 명수
+* 3: l2 명수
 
 experiment 폴더 내 폴더 하나 = 분석환경
+
 * 폴더 구조
 ```bash
 experiment(최상위폴더)
 ├── ss_js(패키지)
 ├── env1
 │   ├── input
-│	│	├── input.xlsx
 │   ├── output
 │   └── result
 ├── env2
 │   ├── input
 │   ├── output
 │   ├── result
-│   
+├── app_env.py   
 ├── app_tojson.py
 ├── app_optimization.py
 └── app_makeresult.py
+└── standard.xlsx
+
 ``` 
 * env1 실행 후
 
