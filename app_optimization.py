@@ -12,7 +12,9 @@ target_obj = int(sys.argv[3])
 
 
 save_dir = "experiment/"+folder_name
-file_path = save_dir+"/input/input.xlsx"
+# file_path = save_dir+"/input/input.xlsx"
+# generated_path = save_dir+"/input/input.json"
+file_path = save_dir+"/input/"+folder_name+".xlsx"
 generated_path = save_dir+"/input/input.json"
 
 # io.generate_json(file_path, generated_path)
@@ -21,6 +23,7 @@ with open(generated_path, 'r', encoding="utf-8") as f:
     json_data = json.load(f)
 
 schedule = Schedule(json_data)
+
 print('schedule generated, optimization start')
 solver = cp_model.CpSolver()
 opti_callback = OptimizerCallback(
