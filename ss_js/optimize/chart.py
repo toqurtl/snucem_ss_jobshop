@@ -92,8 +92,8 @@ def labor_time_to_excel(data_path, result_path):
     for col_name, row_list in labor_time_data.items():
         day_data = []        
         for row_idx, row_value in enumerate(row_list):            
-            labor_time_sheet.cell(row=row_idx+2, column=col_idx, value=row_value)
-            day_data.append(row_value)            
+            labor_time_sheet.cell(row=row_idx+2, column=col_idx, value=row_value)            
+            day_data.append(row_value)
             if col_name == "time":
                 if row_idx % 480 == 479:
                    labor_time_day_sheet.cell(row=(row_idx//480)+2, column=1, value=row_idx//480) 
@@ -102,7 +102,8 @@ def labor_time_to_excel(data_path, result_path):
                     day = row_idx / 480
                     day += 1
                     num_labor = max(day_data)
-                    labor_time_day_sheet.cell(row=(row_idx//480)+2, column=col_idx, value=num_labor)                
+                    labor_time_day_sheet.cell(row=(row_idx//480)+2, column=col_idx, value=num_labor)
+                    day_data.clear()
         col_idx += 1
 
     wb.save(result_path+".xlsx")
@@ -197,6 +198,7 @@ def create_new_labor_dict(json_data):
                 num_labor = data[labor_id]
                 new_json_data[labor_id].append(num_labor)
             else:
+                                    
                 new_json_data[labor_id].append(0)            
         t += 1
     
