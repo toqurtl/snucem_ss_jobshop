@@ -3,6 +3,9 @@
 * sample_data: ss_js 위한 샘플 데이터
 * ss_js: 패키지
 
+## zone_constraint
+zone마다 최대 가능한 인원 제한 
+
 
 # Usage
 ## 분석환경
