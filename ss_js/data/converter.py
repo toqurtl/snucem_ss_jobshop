@@ -227,6 +227,11 @@ class Converter(object):
                         
                 else:
                     if not tasktype["is_module"]:
+                        # 1022
+                        if tasktype["task_id"] =="A2":
+                            if space["module_type"] != "non-module":
+                                continue
+                            
                         work_id = space_id + "_" + tasktype["task_id"]
                         work_list.append({
                             "work_id": work_id,
@@ -237,6 +242,7 @@ class Converter(object):
                             "workpackage_id": tasktype["workpackage_id"],
                             "is_module": tasktype["is_module"]
                         })
+
         return work_list
 
 
@@ -280,7 +286,18 @@ class Converter(object):
                     if ctn > 0:
                         pre, pre_workpackage, suc, suc_workpackage = \
                             row[0].value, row[1].value, row[2].value, row[3].value
-                        if pre_workpackage != "Z":                    
+                        if pre_workpackage != "Z":
+                            #1022
+                            if space["module_type"] == "non-module":
+                                if pre == "A1":
+                                    middle = "A2"
+                                    pre_work = self.get_work(pre, works_of_space)[0]
+                                    middle_work = self.get_work(middle, works_of_space)[0]
+                                    suc_work = self.get_work(suc, works_of_space)[0]
+                                    dep_list.append([pre_work["work_id"], middle_work["work_id"]])
+                                    dep_list.append([middle_work["work_id"], suc_work["work_id"]])
+                                    continue
+                                
                             pre_work = self.get_work(pre, works_of_space)[0]
                             suc_work = self.get_work(suc, works_of_space)[0]                  
                             dep_list.append([pre_work["work_id"], suc_work["work_id"]])
